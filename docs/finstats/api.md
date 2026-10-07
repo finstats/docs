@@ -1798,3 +1798,16 @@ and `months_left` is its free space at that pace.
 Findings are dismissed and brought back with Library health's `POST /api/library/health/dismiss` and `…/undismiss`
 (*manage FinStats* and *see server details*, audited as `finding_dismissed` / `finding_undismissed`). A dismissal holds
 while the situation does: a new scan interval, or a disk passing three months or one, is looked at again.
+
+# v2.3: Export .ics on Upcoming
+
+`GET /api/upcoming.ics?days=&mine=&user_id=` → `text/calendar; charset=utf-8`, `Content-Disposition: attachment;
+filename="finstats-upcoming.ics"`: what Pipeline → Upcoming shows, as a file to import into a calendar app once. It does
+not update itself; `GET /api/calendar.ics` with a calendar key is the calendar that stays current.
+
+Anyone signed in, by the session cookie or a full key; a calendar key is refused (`403`) here as on every route but the
+feed, and the feed still never takes the cookie. Upcoming's own query: `days` 1–90 (default 14, clamped), `mine=true` for
+only the shows the person follows, `user_id` for somebody else's agenda, honoured only with *see everyone* (without it,
+always the caller's own). The events are the feed's, built by the same code (`entries_for`, then one `VEVENT` each), so
+for the same person and filters the two carry the same events, and it names nobody. A read: not audited, and nothing is
+asked of Sonarr, Radarr or Seerr.

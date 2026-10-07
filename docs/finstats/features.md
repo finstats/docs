@@ -65,7 +65,8 @@ they know. The **Pipeline** page then answers the questions statistics alone can
 - **Was it worth getting?** Every request with who asked, how long it took to arrive, and whether they ever watched it,
   plus the list nobody likes to see: what arrived weeks ago and has never been played.
 - **What is coming?** A calendar of new episodes and film releases, marked with who is actually watching that show, so a
-  Friday episode of something three people follow stands out from one nobody has touched in a year.
+  Friday episode of something three people follow stands out from one nobody has touched in a year. **Export .ics**
+  saves the list as you filtered it, to import into a calendar app once; a calendar key keeps one current instead.
 - **What is arriving right now?** The live queue with progress, speed and what went wrong on import, plus what came in
   over the last week, month or year, by indexer, quality and download client.
 
