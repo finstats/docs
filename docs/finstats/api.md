@@ -62,7 +62,7 @@ Session = {
   "transcode": null | {
     "video_codec": "h264", "audio_codec": "aac", "container": "ts",
     "is_video_direct": false, "is_audio_direct": false,
-    "hw_accel": "nvenc"|null, "reasons": ["ContainerNotSupported"], "progress": 0.42|null
+    "hw_accel": "nvenc"|"none"|null, "reasons": ["ContainerNotSupported"], "progress": 0.42|null   // "none": Jellyfin said software (2.3); null: it did not say
   }
 }
 ```
@@ -446,9 +446,9 @@ ignored), `year`, `added` or `size`; anything else is by name.
   "fetched_at": 0|null,           // null → not fetched yet (run task sync_server)
   "info": {"server_name","version","operating_system","architecture","has_update_available","has_pending_restart",
            "transcoding_temp_path","cache_path","program_data_path","log_path","encoder_location"} | null,
-  "storage": [ {"label": "Shows" | "Program data" | "Cache" | "Transcodes" | …, "path", "free_bytes", "used_bytes", "kind": "library"|"system"} ], // [] on servers older than 10.11
+  "storage": [ {"label": "Shows" | "Program data" | "Cache" | "Transcodes" | …, "path", "free_bytes", "used_bytes", "kind": "library"|"system", "device": "sda1"|null} ], // [] on servers older than 10.11
   "plugins": [ {"name","version","status","description"} ],
-  "scheduled_tasks": [ {"name","category","state","last_result": "Completed"|"Failed"|…|null,"last_run_at": 0|null,"last_duration_s": 0|null} ],
+  "scheduled_tasks": [ {"name","key": "RefreshLibrary"|null,"category","state","last_result": "Completed"|"Failed"|…|null,"last_run_at": 0|null,"last_duration_s": 0|null,"interval_s": 3600|null} ],  // interval_s: its shortest interval trigger (2.3)
   "devices": [ {"device_id","name","app","app_version","last_user_id","last_user_name","last_seen"} ]   // newest first
 }
 ```
@@ -1754,3 +1754,47 @@ closes a socket that says nothing) and drops a connection that has answered noth
 **Fallback.** A page that cannot open the socket, or loses it, polls the endpoints above at the same intervals as before
 (now playing and downloads every 5 s, the summary every 10 s, paused while the tab is hidden), and goes back to the socket
 when it can. Behind a reverse proxy that does not pass WebSocket upgrades on, FinStats works as it did, polling.
+
+# v2.3: Capacity
+
+## `GET /api/server/capacity` 🔒 *see server details*
+
+Will this server cope, answered from what FinStats already holds: the busiest moments on record, how fast each disk fills,
+and what that says about the server's own settings. FinStats cannot know what the machine *could* do, so nothing here
+says how many streams it can take. Worked out after a read of the server's details (every 15 minutes) and after a library
+read, never on a request; `null` before the first time.
+
+```jsonc
+{
+  "computed_at": 1767225600,
+  "busiest": [Moment],          // the busiest moment of each spell of playing, busiest first (at most 5): streams, then transcodes
+  "recent": Moment | null,      // the busiest of the last `recent_days`
+  "recent_days": 90,
+  "free_space_reported": true,  // Jellyfin 10.11 and newer report it; without it there are no disks, growth only
+  "disks": [ {"folders": ["/media/films"], "libraries": ["Films"], "free_bytes": 0, "used_bytes": 0,
+              "added_per_month": 0, "months_left": 9.4 | null} ],   // null: nothing was added in the window
+  "growth": [ {"library": "Films", "added_bytes": 0} ],              // over the window, by library
+  "window_months": 6,
+  "findings": [Finding]
+}
+```
+
+`Moment` = `{at, streams, transcodes, hardware, software, unsaid}`: every stream counts, whatever its length; a transcode
+is in hardware, in software (Jellyfin said it used none) or unsaid (an older server, or an imported play). A spell is
+from the first stream starting to the last one ending; an evening of episodes back to back is one.
+
+A disk is the library folders that report the same device and the same free space in one reading. It fills by the files
+under its folders that Jellyfin added in the last `window_months` (by their date added, so a replaced file counts as new),
+and `months_left` is its free space at that pace.
+
+`Finding` = `{key, kind, title, evidence, found_at, dismissed, note, dismissed_at, dismissed_by}`:
+
+| `kind` | `evidence` |
+|---|---|
+| `software_transcodes` | `{days, plays, transcodes, software, hardware, unsaid, most_at_once}`: in the last 90 days, at least 20 transcodes Jellyfin said either way about, none of them in hardware, and transcodes a quarter of plays or more. |
+| `scan_busy` | `{interval_s, last_duration_s, duty_pct, items}`: Jellyfin's library scan, by its own last run against its shortest interval, runs a quarter of the time or more. |
+| `runway` | `{folders, libraries, free_bytes, added_per_month, months_left, window_months}`: a disk with under six months of space at that pace; said again under three and under one. |
+
+Findings are dismissed and brought back with Library health's `POST /api/library/health/dismiss` and `…/undismiss`
+(*manage FinStats* and *see server details*, audited as `finding_dismissed` / `finding_undismissed`). A dismissal holds
+while the situation does: a new scan interval, or a disk passing three months or one, is looked at again.

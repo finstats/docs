@@ -34,6 +34,14 @@ claims, a dub that covers two seasons and not the third, and titles Jellyfin nev
 what is fine on purpose, with a note; it comes back by itself if the files change. FinStats only reports: it never
 deletes, rescans or fixes anything.
 
+## Will it cope?
+**Server → Capacity** answers from what FinStats has already seen. The busiest moments on record: how many streams at
+once, how many of them transcoded, and whether Jellyfin used hardware for it. How fast each disk fills with what is
+added ("films grew 41 GB a month over the last six months; at that pace about nine months of space are left"), where
+Jellyfin 10.11 or newer reports free space. And what that says about the server's own settings: transcodes that never
+use hardware while transcoding is common, or a library scan that runs a quarter of the time. FinStats never says how many
+streams your server could take: it cannot know, so it shows what it has seen.
+
 ## Is that really them?
 
 <img src="../assets/screenshots/security.png" alt="Security page: a world map with a dot for every place people watch from, home in green, a live stream pulsing, a dashed line for an impossible trip from London to New York, and the alerts underneath" width="100%">
