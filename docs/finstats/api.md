@@ -1711,8 +1711,10 @@ as it is, for scripts and as the fallback.
 client that is not a browser; **never a key in the address** (the calendar feed's `?key=` is that feed's alone) and never
 a calendar key (`403`). An `Origin` that is not FinStats' own is refused (`403`), exactly as for a write, so a page on
 another site cannot open it with the cookie its browser would attach; behind a reverse proxy `X-Forwarded-Host` counts
-only with `FINSTATS_TRUST_PROXY`. No credential `401`, a request that is not an upgrade `426`, and more than 20 open
-connections for one person `429` (a tab each; close one and its seat is free again).
+only with `FINSTATS_TRUST_PROXY`. No credential `401`, a request that is not an upgrade `426`. One person holds at most
+20 connections (a tab each): the twenty-first is let in and their oldest is closed with code `4429`, as the oldest
+session gives way to a new sign-in. A page in a browser's back/forward cache keeps its socket until the browser lets
+the page go, so a seat it holds must not stand in anybody's way. A page closed with `4429` polls, as below.
 
 Every message is a JSON text frame. The page sends:
 
