@@ -1,0 +1,98 @@
+site_name: finstats docs
+site_url: https://finstats.github.io/docs/
+site_description: Documentation for finstats, the playback-statistics server for Jellyfin, and for FinUI and FinMotion.
+repo_url: https://github.com/finstats/docs
+repo_name: finstats/docs
+edit_uri: edit/main/docs/
+copyright: finstats, FinUI and FinMotion are free software under the GNU General Public License v3.0.
+
+theme:
+  name: material
+  # Nothing is loaded from another host: the fonts are bundled (assets/fonts), as finstats bundles its own.
+  font: false
+  logo: assets/logo.svg
+  favicon: assets/logo.svg
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Dark
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Light
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - navigation.footer
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+
+extra_css:
+  - assets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+
+plugins:
+  - search
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+nav:
+  - Home: index.md
+  - finstats:
+      - finstats/index.md
+      - Get started: finstats/install.md
+      - What you get: finstats/features.md
+      - Privacy: finstats/privacy.md
+      - Bringing your history:
+          - finstats/imports/index.md
+          - How Jellystat data is read: finstats/imports/jellystat.md
+          - How Streamystats data is read: finstats/imports/streamystats.md
+          - How Tautulli data is read: finstats/imports/tautulli.md
+      - Settings: finstats/settings.md
+      - Updating and moving: finstats/updating.md
+      - Questions: finstats/faq.md
+      - A tour of the pages: finstats/tour.md
+      - Security:
+          - Security model: finstats/security.md
+          - Reporting a vulnerability: finstats/reporting-security.md
+      - HTTP API: finstats/api.md
+      - Contributing: finstats/contributing.md
+  - FinUI:
+      - finui/index.md
+      - Make it yours: finui/create.md
+      - Using it: finui/using.md
+      - Icons that move: finui/icons.md
+      - Blocks: finui/blocks.md
+  - FinMotion:
+      - finmotion/index.md
+      - Install: finmotion/install.md
+      - Four springs: finmotion/springs.md
+      - Where things are: finmotion/layout.md

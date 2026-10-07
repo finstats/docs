@@ -1,0 +1,78 @@
+/* finstats' own look on Material: washi paper by day (cream ground, ink text, a vermilion seal for the accent) and
+   Obsidian by night, the colours of FinUI's tokens.css. The fonts are bundled beside this file, so the site asks no
+   other host for anything. */
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("fonts/inter-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("fonts/inter-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2");
+}
+
+:root {
+  --md-text-font: "Inter";
+  --md-code-font: "JetBrains Mono";
+}
+
+[data-md-color-scheme="default"] {
+  --md-default-bg-color: #efe9dc;
+  --md-default-fg-color: #24211c;
+  --md-default-fg-color--light: #5b564c;
+  --md-default-fg-color--lighter: #6f6859;
+  --md-default-fg-color--lightest: #d8d0bc;
+  --md-primary-fg-color: #e7e0ce;
+  --md-primary-fg-color--light: #efe9dc;
+  --md-primary-fg-color--dark: #d8d0bc;
+  --md-primary-bg-color: #24211c;
+  --md-primary-bg-color--light: #5b564c;
+  --md-accent-fg-color: #9a2f1d;
+  --md-typeset-a-color: #9a2f1d;
+  --md-code-bg-color: #fbf8f1;
+  --md-footer-bg-color: #e7e0ce;
+  --md-footer-bg-color--dark: #d8d0bc;
+  --md-footer-fg-color: #24211c;
+  --md-footer-fg-color--light: #5b564c;
+  --md-footer-fg-color--lighter: #6f6859;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-hue: 0;
+  --md-default-bg-color: #1e1e1e;
+  --md-default-fg-color: #dadada;
+  --md-default-fg-color--light: #a8a8a8;
+  --md-default-fg-color--lighter: #7d7d7d;
+  --md-default-fg-color--lightest: #363636;
+  --md-primary-fg-color: #181818;
+  --md-primary-fg-color--light: #262626;
+  --md-primary-fg-color--dark: #121212;
+  --md-primary-bg-color: #ececec;
+  --md-primary-bg-color--light: #a8a8a8;
+  --md-accent-fg-color: #a68af9;
+  --md-typeset-a-color: #a68af9;
+  --md-code-bg-color: #262626;
+  --md-footer-bg-color: #181818;
+  --md-footer-bg-color--dark: #121212;
+}
+
+.md-header, .md-tabs { border-bottom: 1px solid var(--md-default-fg-color--lightest); box-shadow: none; }
+.md-typeset img { border-radius: 8px; }
+.md-typeset table:not([class]) { font-size: .72rem; }
+[data-md-color-scheme="default"] .md-search__input { background-color: rgba(0, 0, 0, .07); }
+[data-md-color-scheme="default"] .md-search__input:hover { background-color: rgba(0, 0, 0, .11); }
