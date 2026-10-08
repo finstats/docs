@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this is
 
 The documentation of finstats, FinUI and FinMotion (`github.com/finstats/docs`), built with MkDocs and Material for
-MkDocs and published by `.github/workflows/pages.yml` at <https://docs.finstats.no/>. **All documentation of the
+MkDocs and published by `.github/workflows/pages.yml` at <https://finstats.no/>. **All documentation of the
 fin\* projects is written here**, never in the code's repositories (the owner's decision, 2026-10-07). Those keep only
 what GitHub or the build needs from them: each README (a short landing page that links here), finstats'
 `CONTRIBUTING.md` and `SECURITY.md` (short pointers to the pages here, because GitHub reads them from the repository),

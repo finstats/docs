@@ -1,7 +1,7 @@
 # finstats docs
 
 The documentation for [finstats](https://github.com/finstats/finstats), [FinUI](https://github.com/finstats/finui) and
-[FinMotion](https://github.com/finstats/finmotion), published at **[docs.finstats.no](https://docs.finstats.no/)**.
+[FinMotion](https://github.com/finstats/finmotion), published at **[finstats.no](https://finstats.no/)**.
 
 Every page is Markdown under `docs/`, built with [MkDocs](https://www.mkdocs.org) and
 [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/). The Pages workflow builds the site on every pull

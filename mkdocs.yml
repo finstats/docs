@@ -1,5 +1,5 @@
 site_name: finstats docs
-site_url: https://docs.finstats.no/
+site_url: https://finstats.no/
 site_description: Documentation for finstats, the playback-statistics server for Jellyfin, and for FinUI and FinMotion.
 repo_url: https://github.com/finstats/docs
 repo_name: finstats/docs
