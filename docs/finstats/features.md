@@ -4,6 +4,10 @@
 See every stream as it happens: who, what, on which device and from where, whether it plays
 directly or transcodes, and why. A status bar keeps the essentials in sight on every page.
 
+Coming from Plex? **Simple mode** is a second layout, chosen per browser in Settings → Appearance: a bar across the top
+and the stats alone, home, libraries, users, history and graphs, laid out the way a classic Plex stats server is. It loads
+only its own half of FinStats, so it is also the quickest way in.
+
 ## Answers, not just charts
 
 <img src="../assets/screenshots/playback.png" alt="Playback page: play methods, concurrent streams over time, which clients transcode, how far people get" width="100%">

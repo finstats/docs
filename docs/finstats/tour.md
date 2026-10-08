@@ -13,6 +13,32 @@ To click through it yourself, [try the demo](https://demo.finstats.no/).
 
     ![Dashboard, on a phone](../assets/screenshots/pages/mobile/dashboard.png){ loading=lazy width="390" }
 
+## Simple mode
+
+A second layout for people who come from Plex, chosen per browser under Settings → Appearance → Layout: a bar across
+the top instead of the menu, and the stats alone, laid out the way a classic Plex stats server is. Home has what is
+playing (a card per stream with how it plays, from where and when it ends), the watch statistics as ranked cards by play
+count or duration over the last N days, the libraries and what arrived lately. Libraries, Users, History and Graphs are
+pages of their own, each library, person and title with its global figures and its own history. Simple mode loads only
+its own half of FinStats; the rest (Recap, Together, Pipeline, Security and the server pages) stays in the FinStats
+layout. Both themes, and nothing on it moves.
+
+=== "Home"
+
+    ![Simple mode's home, on a desktop](../assets/screenshots/pages/desktop/simple-home.png){ loading=lazy }
+
+=== "History"
+
+    ![Simple mode's History, on a desktop](../assets/screenshots/pages/desktop/simple-history.png){ loading=lazy }
+
+=== "Graphs"
+
+    ![Simple mode's Graphs, on a desktop](../assets/screenshots/pages/desktop/simple-graphs.png){ loading=lazy }
+
+=== "Phone"
+
+    ![Simple mode's home, on a phone](../assets/screenshots/pages/mobile/simple-home.png){ loading=lazy width="390" }
+
 ## Activity
 
 === "Desktop"
