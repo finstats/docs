@@ -88,7 +88,8 @@ carries the Monday date and `"bucket": "week"` is set at top level (otherwise `"
             "users": 3,               // distinct users (absent for kind=users)
             "image_item_id": "…"|null, "last_played": 1790000000} ]}
 ```
-Sorted by `watch_s` desc unless `&sort=plays`.
+Sorted by `watch_s` desc unless `&sort=plays` (plays first) or `&sort=users` (distinct viewers, then plays, then name;
+for `kind=users`, which has no viewers to count, the default order). Any other `sort` is the default order.
 
 `GET /api/stats/heatmap` → `{"plays": [[24 ints] × 7], "watch_s": [[24 ints] × 7]}`: outer index 0 = Monday, inner = hour of day (server TZ).
 
