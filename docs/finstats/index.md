@@ -5,7 +5,7 @@
 **See what your Jellyfin server is really doing.** Who is watching, what they watch, how it streams, and your year in
 review. One tiny container. No database server. Set up in two minutes.
 
-[Try the demo](https://finstats.no/): finstats in your browser, with invented people and titles.
+[Try the demo](https://demo.finstats.no/): finstats in your browser, with invented people and titles.
 Nothing to install.
 
 ![The finstats dashboard: two live streams, watch-time tiles and the newest arrivals in the library](../assets/screenshots/dashboard.png)

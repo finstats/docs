@@ -22,7 +22,7 @@ The documentation for **finstats** and the two libraries it is built from, in on
 
 ## Elsewhere
 
-- [Try the finstats demo](https://finstats.no/): finstats in your browser, with invented people and
+- [Try the finstats demo](https://demo.finstats.no/): finstats in your browser, with invented people and
   titles. Nothing to install.
 - [The FinUI gallery and FinUI create](https://finui.finstats.no/), and [the FinMotion site](https://finmotion.finstats.no/).
 - The code: [finstats](https://github.com/finstats/finstats), [FinUI](https://github.com/finstats/finui),
