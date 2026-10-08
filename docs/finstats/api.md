@@ -183,10 +183,11 @@ the trash. Whoever watched with it is grouped again without it, and with it once
 ```jsonc
 {"libraries": [ {"id","name","collection_type","removed","item_count",
                  "movie_count","series_count","season_count","episode_count","artist_count","album_count","track_count",
-                 "size_bytes","plays","watch_s","last_played_at"} ]}
+                 "size_bytes","plays","watch_s","last_played_at",
+                 "last_item_id","last_item_name","last_series_name"|null,"last_item_type"} ]}  // what that last play was
 ```
-The counts are what the library holds now (removed items left out) and take no filter; `plays`, `watch_s` and
-`last_played_at` follow the window and whose plays the caller may see. `artist_count` is the album artists its tracks
+The counts are what the library holds now (removed items left out) and take no filter; `plays`, `watch_s`,
+`last_played_at` and the `last_item_*` of that play follow the window and whose plays the caller may see. `artist_count` is the album artists its tracks
 name: FinStats does not read Jellyfin's artist items.
 
 `GET /api/libraries/{id}` → `{"library": {…}, "top": [TopRow], "recently_added": [ItemCard], "daily": [...], "bucket": "day"}`
