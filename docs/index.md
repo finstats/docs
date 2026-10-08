@@ -22,9 +22,9 @@ The documentation for **finstats** and the two libraries it is built from, in on
 
 ## Elsewhere
 
-- [Try the finstats demo](https://finstats.github.io/finstats/): finstats in your browser, with invented people and
+- [Try the finstats demo](https://finstats.no/): finstats in your browser, with invented people and
   titles. Nothing to install.
-- [The FinUI gallery and FinUI create](https://finstats.github.io/finui/), and [the FinMotion site](https://finstats.github.io/finmotion/).
+- [The FinUI gallery and FinUI create](https://finui.finstats.no/), and [the FinMotion site](https://finmotion.finstats.no/).
 - The code: [finstats](https://github.com/finstats/finstats), [FinUI](https://github.com/finstats/finui),
   [FinMotion](https://github.com/finstats/finmotion). Patch notes are on
   [finstats' releases page](https://github.com/finstats/finstats/releases) and in the app's Patch notes tab.

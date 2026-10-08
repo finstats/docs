@@ -5,7 +5,7 @@ checkboxes, sliders, date pickers and code inputs; cards, tables that sort by me
 that stack, drawers, popovers, menus and toasts; and charts (bars, lines, donuts, heatmaps) that read only tokens.
 Vanilla ES modules and plain CSS, no build step and no dependencies, light and dark from one set of tokens.
 
-**[See FinUI, and try its looks →](https://finstats.github.io/finui/)** · **[Make it yours in FinUI create →](https://finstats.github.io/finui/create/)** · **[Make it move with FinMotion →](https://finstats.github.io/finmotion/)**
+**[See FinUI, and try its looks →](https://finui.finstats.no/)** · **[Make it yours in FinUI create →](https://finui.finstats.no/create/)** · **[Make it move with FinMotion →](https://finmotion.finstats.no/)**
 
 ## What it is
 

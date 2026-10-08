@@ -1,7 +1,7 @@
 # A tour of the pages
 
 Every page of finstats, whole, from top to bottom, with generated demo data (invented people, titles and artwork).
-To click through it yourself, [try the demo](https://finstats.github.io/finstats/).
+To click through it yourself, [try the demo](https://finstats.no/).
 
 ## Dashboard
 

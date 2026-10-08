@@ -22,7 +22,7 @@ FinUI's rule checker and tests are kept privately, not in this repository, and r
 ## With FinMotion
 
 FinUI is still on purpose: every component is plain and complete without movement, and installed as above it stays that
-way. [FinMotion](https://finstats.github.io/finmotion/) is how it moves, a project of its own put on top: toggles thrown,
+way. [FinMotion](https://finmotion.finstats.no/) is how it moves, a project of its own put on top: toggles thrown,
 tabs whose line inches across, charts that draw themselves, notices held like a hand of cards, on four springs, at the
 pace FinUI's Motion choice sets, and still under reduced motion. FinUI needs no change for it: FinMotion finds each
 component by FinUI's own classes and moves what FinUI draws.
@@ -30,8 +30,8 @@ component by FinUI's own classes and moves what FinUI draws.
 Install it beside FinUI, from the same folder:
 
 ```sh
-curl -fsSL https://finstats.github.io/finui/install.sh | sh        # FinUI into ./finui (add your preset's code)
-curl -fsSL https://finstats.github.io/finmotion/install.sh | sh    # FinMotion into ./finmotion, beside it
+curl -fsSL https://finui.finstats.no/install.sh | sh        # FinUI into ./finui (add your preset's code)
+curl -fsSL https://finmotion.finstats.no/install.sh | sh    # FinMotion into ./finmotion, beside it
 ```
 
 Then load FinMotion's stylesheet after all of FinUI's, and call `motion()` once:

@@ -1,6 +1,6 @@
 # Make it yours
 
-[FinUI create](https://finstats.github.io/finui/create/) shows a wall of FinUI (dashboards, forms, tables, settings,
+[FinUI create](https://finui.finstats.no/create/) shows a wall of FinUI (dashboards, forms, tables, settings,
 dialogs, charts) and lets you change it as you watch, in light, dark or both. Start from one of eleven styles (whole looks,
 from Washi, finstats' own, to Noir, Gazette or Arcade), then change any of twenty-two choices: base colour, accent, chart
 colours, contrast; radius, density, borders, cards, buttons, fields, tables; highlight, motion, icon stroke and ends, menu,
@@ -8,8 +8,8 @@ page, focus ring; the text, heading and mono fonts and how headings are set. Loc
 you made is a short code, and one command takes it home:
 
 ```sh
-curl -fsSL https://finstats.github.io/finui/install.sh | sh -s -- 0101         # FinUI into ./finui, your tokens after tokens.css' own
-curl -fsSL https://finstats.github.io/finui/install.sh | sh -s -- 0101 --css   # or one finui.css, with its fonts beside it
+curl -fsSL https://finui.finstats.no/install.sh | sh -s -- 0101         # FinUI into ./finui, your tokens after tokens.css' own
+curl -fsSL https://finui.finstats.no/install.sh | sh -s -- 0101 --css   # or one finui.css, with its fonts beside it
 ```
 
 Nothing but `curl` and `sh`: no package manager, no Node. The installer writes only into an empty folder (`--dir` names

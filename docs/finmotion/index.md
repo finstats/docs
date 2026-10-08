@@ -4,7 +4,7 @@ How [FinUI](../finui/index.md) moves. FinUI is the components: still, plain, com
 FinMotion is an extra you put on top: one stylesheet and one call, and every FinUI component on the page moves. Vanilla ES
 modules and plain CSS, no build step and no dependencies, like FinUI.
 
-**[See every part move, and try FinUI's Motion choice on it →](https://finstats.github.io/finmotion/)**
+**[See every part move, and try FinUI's Motion choice on it →](https://finmotion.finstats.no/)**
 
 Start with [Install](install.md); the movement itself is [four springs](springs.md).
 

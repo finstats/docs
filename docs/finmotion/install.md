@@ -5,17 +5,17 @@ FinMotion is source you copy and own, like FinUI. One command copies it into `./
 (`--dir` names another) and fetches everything before it writes anything.
 
 ```sh
-curl -fsSL https://finstats.github.io/finmotion/install.sh | sh
+curl -fsSL https://finmotion.finstats.no/install.sh | sh
 ```
 
 ## Alongside FinUI
 
-This is what FinMotion is for. Install FinUI with its own installer (its [create page](https://finstats.github.io/finui/create/)
+This is what FinMotion is for. Install FinUI with its own installer (its [create page](https://finui.finstats.no/create/)
 gives you one with your look in it), then FinMotion beside it, from the same folder:
 
 ```sh
-curl -fsSL https://finstats.github.io/finui/install.sh | sh        # FinUI into ./finui
-curl -fsSL https://finstats.github.io/finmotion/install.sh | sh    # FinMotion into ./finmotion, beside it
+curl -fsSL https://finui.finstats.no/install.sh | sh        # FinUI into ./finui
+curl -fsSL https://finmotion.finstats.no/install.sh | sh    # FinMotion into ./finmotion, beside it
 ```
 
 Load FinMotion's stylesheet after all of FinUI's, and call `motion()` once:
@@ -36,7 +36,7 @@ From then on every FinUI component on the page moves (the ones there now and the
 answers a function that stops it all. FinUI needs no change for it: each part finds its component by FinUI's own classes
 and moves what FinUI draws. What a person does to a component moves at once; an entrance or a flourish waits for the `fm-`
 class a page adds (`fm-roll` on a stat tile, `fm-arrive` on a table, `fm-film` on a progress bar, …). The
-[site](https://finstats.github.io/finmotion/) has a page for each, with the class it needs.
+[site](https://finmotion.finstats.no/) has a page for each, with the class it needs.
 
 ## On its own
 
@@ -45,7 +45,7 @@ any page: `finmotion.css` gives every element the four springs as tokens, `core/
 the odometer is a component of FinMotion's own.
 
 ```sh
-curl -fsSL https://finstats.github.io/finmotion/install.sh | sh
+curl -fsSL https://finmotion.finstats.no/install.sh | sh
 ```
 
 ```html
