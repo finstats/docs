@@ -160,7 +160,8 @@ the trash. Whoever watched with it is grouped again without it, and with it once
 ```jsonc
 {"users": [ {"id","name","is_admin","is_disabled","removed","has_image",
              "last_login_at","last_activity_at","plays","watch_s","last_played_at",
-             "last_item_name","last_client"} ]}
+             "last_item_name","last_item_id","last_client","last_device",
+             "last_ip"} ]}   // of their last play; last_ip is null without see_network
 ```
 
 `GET /api/users/{id}`
