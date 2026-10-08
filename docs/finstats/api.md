@@ -790,7 +790,8 @@ ids (absent = all); ids that are not ids and cursors that are not cursors are a 
 
 # v1.1.2: Recently added
 
-`GET /api/library/recent?limit=30` (1..60), for everyone signed in: the library is the same for all, nothing here is about plays.
+`GET /api/library/recent?limit=30&kind=` (1..60), for everyone signed in: the library is the same for all, nothing here is about plays.
+`kind` is `movies` (films), `shows` (episodes, folded as below) or `music` (albums); anything else, or none, is every kind.
 ```jsonc
 { "items": [
   {"kind": "episodes", "type": "Episode", "id": "<series id>", "name": "The Rookery", "sub": "Season 4" | "3 seasons" | "Specials" | null,
