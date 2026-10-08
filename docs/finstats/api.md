@@ -179,9 +179,13 @@ the trash. Whoever watched with it is grouped again without it, and with it once
 
 `GET /api/libraries`
 ```jsonc
-{"libraries": [ {"id","name","collection_type","removed","item_count","series_count","episode_count",
+{"libraries": [ {"id","name","collection_type","removed","item_count",
+                 "movie_count","series_count","season_count","episode_count","artist_count","album_count","track_count",
                  "size_bytes","plays","watch_s","last_played_at"} ]}
 ```
+The counts are what the library holds now (removed items left out) and take no filter; `plays`, `watch_s` and
+`last_played_at` follow the window and whose plays the caller may see. `artist_count` is the album artists its tracks
+name: FinStats does not read Jellyfin's artist items.
 
 `GET /api/libraries/{id}` → `{"library": {…}, "top": [TopRow], "recently_added": [ItemCard], "daily": [...], "bucket": "day"}`
 
