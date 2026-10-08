@@ -93,7 +93,9 @@ carries the Monday date and `"bucket": "week"` is set at top level (otherwise `"
 Sorted by `watch_s` desc unless `&sort=plays` (plays first) or `&sort=users` (distinct viewers, then plays, then name;
 for `kind=users`, which has no viewers to count, the default order). Any other `sort` is the default order.
 
-`GET /api/stats/heatmap` → `{"plays": [[24 ints] × 7], "watch_s": [[24 ints] × 7]}`: outer index 0 = Monday, inner = hour of day (server TZ).
+`GET /api/stats/heatmap` → `{"plays": [[24 ints] × 7], "watch_s": [[24 ints] × 7], "by_type": {…}}`: outer index 0 = Monday, inner = hour of day (server TZ).
+`by_type` splits it by kind of media, `Movie`, `Episode`, `Audio` and `Other` (anything else), each
+`{"weekday": [[plays, watch_s] × 7], "hour": [[plays, watch_s] × 24]}`; the kinds add up to the grid.
 
 `GET /api/stats/playback`
 ```jsonc
