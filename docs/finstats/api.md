@@ -107,7 +107,7 @@ for `kind=users`, which has no viewers to count, the default order). Any other `
 
 ## Activity
 
-`GET /api/activity?page=1&per_page=50&q=&method=&type=&item_id=&series_id=&source=&deleted=` (+ common filters)
+`GET /api/activity?page=1&per_page=50&q=&method=&type=&item_id=&series_id=&source=&watched=&deleted=` (+ common filters)
 
 `method`, `type` and `source` each take several comma-separated values: `type=Movie,Episode` is films
 and episodes and no music. `type` also takes `Other`, which is anything that is not `Movie`,
@@ -117,6 +117,9 @@ so an unknown tracker means all of them. `sources` in the answer lists which of 
 in that order. They are scoped to whose plays they may see, and deliberately *not* narrowed by the window or
 the other filters, so a filter built from it does not appear and disappear as the days change. The UI
 offers the filter only when there is more than one to choose between.
+
+`watched=1` keeps only the plays that went far enough to count as seen: `completion` of at least 0.8, the same rule a
+profile's show progress and film list use, so a play without a runtime is never one. `total` counts the same plays.
 
 `deleted=1` lists the trash instead (2.2.0): the plays a manager deleted in the last 30 days, scoped and filtered
 exactly like the list itself (without `see_everyone`, one's own), newest deletion first, each row with `deleted_at` and
