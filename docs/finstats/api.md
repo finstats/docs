@@ -397,7 +397,8 @@ The collector now keeps a timeline per live play and counts interruptions.
 
 ```jsonc
 {
-  "concurrency": {"peak": 4, "peak_at": 1790000000|null, "peak_transcodes": 2,
+  "concurrency": {"peak": 4, "peak_at": 1790000000|null,
+                  "peak_transcodes": 2, "peak_direct_streams": 1, "peak_direct_plays": 3,   // the most of each at once, each its own maximum
                   "series": [{"date": "2026-01-31", "peak": 3}], "bucket": "day"|"week"},   // gap-free, same bucketing as overview.daily
   "network": [Bucket],            // names "Local" / "Remote" / "Unknown"; [] for non-admins
   "data_bytes": 1234567890,       // estimated bytes sent to clients (stream bitrate × time watched)
