@@ -20,8 +20,7 @@ concurrency:
 jobs:
   build:
     name: Build
-    # The self-hosted runner at home, except for a pull request, which may come from anyone's fork: that stays on GitHub.
-    runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-24.04' || 'self-hosted' }}
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -42,7 +41,7 @@ jobs:
     name: Deploy
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
-    runs-on: self-hosted
+    runs-on: ubuntu-24.04
     permissions:
       pages: write
       id-token: write
