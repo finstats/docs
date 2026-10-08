@@ -399,7 +399,11 @@ The collector now keeps a timeline per live play and counts interruptions.
   ```
   Oldest first. Empty for imported plays: a tracker stores one row per play and nothing of what happened during it.
 
-## `GET /api/stats/insights` (common filters)
+## `GET /api/stats/insights?parts=` (common filters)
+
+`parts` names what a page wants, comma-separated (`parts=concurrency`): only those keys are answered, and only the passes
+that work them out run, so a page that draws the peak alone does not wait for the rest. Unknown names are ignored; none
+known, or no `parts`, is every key below.
 
 ```jsonc
 {
