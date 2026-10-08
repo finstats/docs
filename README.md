@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/assets/logo.svg" width="88" height="88" alt=""></p>
+
 # FinStats docs
 
 The documentation for [FinStats](https://github.com/finstats/finstats), [FinUI](https://github.com/finstats/finui) and

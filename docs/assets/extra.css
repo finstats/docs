@@ -76,3 +76,7 @@
 .md-typeset table:not([class]) { font-size: .72rem; }
 [data-md-color-scheme="default"] .md-search__input { background-color: rgba(0, 0, 0, .07); }
 [data-md-color-scheme="default"] .md-search__input:hover { background-color: rgba(0, 0, 0, .11); }
+
+/* The mark in the header, without its tile: one file per scheme, the other hidden. */
+[data-md-color-scheme="default"] .md-logo .logo-mark--dark,
+[data-md-color-scheme="slate"] .md-logo .logo-mark--light { display: none; }
