@@ -1,4 +1,4 @@
-# Builds the site with MkDocs and publishes it to GitHub Pages (https://finstats.github.io/docs/).
+# Builds the site with MkDocs and publishes it to GitHub Pages (https://docs.finstats.no/).
 #
 #   push to main    → build, check, deploy
 #   pull request    → build and check, nothing is published
