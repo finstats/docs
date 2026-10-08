@@ -2,7 +2,7 @@
 
 [FinUI create](https://finui.finstats.no/create/) shows a wall of FinUI (dashboards, forms, tables, settings,
 dialogs, charts) and lets you change it as you watch, in light, dark or both. Start from one of eleven styles (whole looks,
-from Washi, finstats' own, to Noir, Gazette or Arcade), then change any of twenty-two choices: base colour, accent, chart
+from Washi, FinStats' own, to Noir, Gazette or Arcade), then change any of twenty-two choices: base colour, accent, chart
 colours, contrast; radius, density, borders, cards, buttons, fields, tables; highlight, motion, icon stroke and ends, menu,
 page, focus ring; the text, heading and mono fonts and how headings are set. Lock what you like and shuffle the rest. What
 you made is a short code, and one command takes it home:

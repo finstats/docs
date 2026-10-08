@@ -1,6 +1,6 @@
-# Contributing to finstats
+# Contributing to FinStats
 
-Thanks for wanting to help. finstats is a small project with a narrow idea of itself, and this page tells you
+Thanks for wanting to help. FinStats is a small project with a narrow idea of itself, and this page tells you
 how to report a problem, suggest something, or send a change that is likely to be merged. Everyone taking part
 is expected to follow the [code of conduct](https://github.com/finstats/finstats/blob/main/CODE_OF_CONDUCT.md).
 
@@ -17,21 +17,21 @@ You do not have to write Rust. Useful contributions, roughly in order of how oft
 - **Answering a question** in [Discussions](https://github.com/finstats/finstats/discussions), or showing how you
   run it. Other people's setups are the best documentation.
 
-A question about installing or running finstats belongs in
+A question about installing or running FinStats belongs in
 [Discussions → Q&A](https://github.com/finstats/finstats/discussions/categories/q-a), not in an issue.
 
-## What finstats is, and what it will not become
+## What FinStats is, and what it will not become
 
 Knowing this saves you from building something that cannot be merged.
 
-- **Read-only towards Jellyfin.** finstats never changes anything on your server and never starts a scan.
+- **Read-only towards Jellyfin.** FinStats never changes anything on your server and never starts a scan.
   The one write it ever makes is creating its own API key during setup.
 - **Light.** One binary, a bundled SQLite database, under 100 MB of memory. No database server, no queue, no
   cache service. A change that needs a second container will not be merged.
 - **Private.** No telemetry, no accounts, nothing loaded from other hosts. By default the only request it makes
   to anything but your Jellyfin is an anonymous "what is my IP" lookup, made once and switchable off; the one other, downloading
   a geolocation database for the Security map, stays off until the owner asks for it, and addresses are always looked up
-  locally. Notifications are the one thing finstats sends rather than reads, and only to destinations the owner enters, only the
+  locally. Notifications are the one thing FinStats sends rather than reads, and only to destinations the owner enters, only the
   events ticked for each, and without addresses unless that destination asked for them. Settings → System → Outbound connections lists every
   destination, so a new one cannot be added quietly: it shows up there. The [privacy page](privacy.md), the
   README and the [security model](security.md) state these things as promises; a change that would make one of
@@ -51,14 +51,14 @@ Knowing this saves you from building something that cannot be merged.
 [Open a bug report](https://github.com/finstats/finstats/issues/new?template=bug_report.yml). The form asks
 for what is needed; the two things that matter most:
 
-- **The finstats version** (bottom right of every page, or the Patch notes tab) and **how you run it**
+- **The FinStats version** (bottom right of every page, or the Patch notes tab) and **how you run it**
   (which image tag, or from source).
 - **The log** around the moment it went wrong: `docker logs finstats`. For more detail, start it with
   `-e RUST_LOG=finstats=debug`.
 
 **Look at what you paste before you post it.** Logs and screenshots contain user names, titles, device names
 and IP addresses of the people on your server. Blur or replace them. **Never attach** `finstats.db`, a
-finstats backup or a Jellystat export: each is a complete viewing history, and the database also contains
+FinStats backup or a Jellystat export: each is a complete viewing history, and the database also contains
 your Jellyfin API key. If a maintainer needs data to reproduce something, they will ask for the smallest
 piece that shows it.
 
@@ -66,7 +66,7 @@ piece that shows it.
 
 [Open a feature request](https://github.com/finstats/finstats/issues/new?template=feature_request.yml) and
 describe **the question you could not answer** ("which of my users still use the old Android app?") rather
-than the screen you imagine. There is often a smaller way to answer it, sometimes with data finstats
+than the screen you imagine. There is often a smaller way to answer it, sometimes with data FinStats
 already has.
 
 Not sure yet whether it is a feature? Think out loud in
@@ -96,7 +96,7 @@ so 1.85 or newer); SQLite is bundled; Node.js is only used for a syntax check. T
 
 With `cargo run`, changes to the web UI (`web/`) need only a browser refresh: debug builds read it from disk.
 Rust changes need a restart. Release builds and the Docker image compile the UI and `CHANGELOG.md` in, so
-they need a rebuild. To start over, stop finstats and delete the data directory. `RUST_LOG=finstats=debug`
+they need a rebuild. To start over, stop FinStats and delete the data directory. `RUST_LOG=finstats=debug`
 shows what the collector and the syncs are doing.
 
 [`CLAUDE.md`](https://github.com/finstats/finstats/blob/main/CLAUDE.md) explains how the code is organised and why; the [HTTP API](api.md) is the
@@ -104,7 +104,7 @@ HTTP contract.
 
 ## A local Docker setup
 
-finstats only reads from Jellyfin, so developing against your real server is safe. A throwaway one is still
+FinStats only reads from Jellyfin, so developing against your real server is safe. A throwaway one is still
 nicer: you can create users, break things and reset it without anyone noticing. This runs your working tree
 as an image next to a throwaway Jellyfin, on a private network, with its own data folder. Nothing here
 touches a production container or its data. Compose is not needed.
@@ -131,15 +131,15 @@ docker run -d --name finstats-dev --network finstats-dev -p 8089:8080 \
 
 1. Open <http://localhost:8097> and click through Jellyfin's own first-run wizard: create an administrator,
    add `/media` as a library.
-2. Open <http://localhost:8089>. In finstats' setup the Jellyfin address is **`http://jellyfin-dev:8096`**:
+2. Open <http://localhost:8089>. In FinStats' setup the Jellyfin address is **`http://jellyfin-dev:8096`**:
    the container's name and Jellyfin's *internal* port, not `localhost` and not 8097. Inside a container,
    `localhost` is the container itself; this is the most common way to get "Could not connect".
-3. Play something in the Jellyfin web client. It appears on the finstats dashboard within five seconds.
+3. Play something in the Jellyfin web client. It appears on the FinStats dashboard within five seconds.
    Pause, skip and switch subtitles to get a timeline.
 
 After a change: `docker build -t finstats:dev . && docker rm -f finstats-dev`, then step 4 again, and
 `docker logs -f finstats-dev`. Dependencies are cached in a layer of their own, so a rebuild compiles only
-finstats unless you touched `Cargo.toml` or `Cargo.lock`.
+FinStats unless you touched `Cargo.toml` or `Cargo.lock`.
 
 Things that trip people up:
 
@@ -193,7 +193,7 @@ Short, because each one exists for a reason that has already cost somebody an ev
     changelog is the in-app Patch notes, written at release time. Say in your pull request what a user will
     notice, in one or two plain sentences; that becomes the patch note.
 11. **Documentation lives in [its own repository](https://github.com/finstats/docs)**, published as this site.
-    A change that a page here describes comes with a pull request there; finstats itself keeps only its README, this
+    A change that a page here describes comes with a pull request there; FinStats itself keeps only its README, this
     project's short `CONTRIBUTING.md` and `SECURITY.md`, and the patch notes.
 
 ## Commit messages
@@ -231,6 +231,6 @@ container is a channel.
 
 ## Licence
 
-finstats is licensed under the [GNU General Public License v3.0](https://github.com/finstats/finstats/blob/main/LICENSE) (`GPL-3.0-only`). By contributing
+FinStats is licensed under the [GNU General Public License v3.0](https://github.com/finstats/finstats/blob/main/LICENSE) (`GPL-3.0-only`). By contributing
 you agree that your contribution is licensed under the same terms, and you confirm that you wrote it or
 otherwise have the right to submit it under that licence. You keep the copyright to your work.

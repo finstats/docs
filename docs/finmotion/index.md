@@ -22,4 +22,4 @@ Start with [Install](install.md); the movement itself is [four springs](springs.
 - It imports nothing from outside itself, not even FinUI: it moves what is on the page.
 - FinMotion's checks and tests are kept privately, not in this repository.
 
-GPL-3.0-only, as FinUI and finstats.
+GPL-3.0-only, as FinUI and FinStats.

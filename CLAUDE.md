@@ -4,12 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-The documentation of finstats, FinUI and FinMotion (`github.com/finstats/docs`), built with MkDocs and Material for
+The documentation of FinStats, FinUI and FinMotion (`github.com/finstats/docs`), built with MkDocs and Material for
 MkDocs and published by `.github/workflows/pages.yml` at <https://finstats.no/>. **All documentation of the
 fin\* projects is written here**, never in the code's repositories (the owner's decision, 2026-10-07). Those keep only
-what GitHub or the build needs from them: each README (a short landing page that links here), finstats'
+what GitHub or the build needs from them: each README (a short landing page that links here), FinStats'
 `CONTRIBUTING.md` and `SECURITY.md` (short pointers to the pages here, because GitHub reads them from the repository),
-`CODE_OF_CONDUCT.md`, the `.github/` forms, and `CHANGELOG.md`, which finstats compiles in as its Patch notes and so stays
+`CODE_OF_CONDUCT.md`, the `.github/` forms, and `CHANGELOG.md`, which FinStats compiles in as its Patch notes and so stays
 there. Agent guidance (each `CLAUDE.md`) is not documentation and stays with its code.
 
 Four repositories, side by side under `~/projects`: `finstats`, `finui`, `finmotion` and this one, `docs`.
@@ -36,38 +36,38 @@ docs/assets/        screenshots/, logo.svg, fonts/ (Inter and JetBrains Mono, OF
 
 ## The rules
 
-- **A page changes with what it describes.** A change to finstats, FinUI or FinMotion that a page here describes comes
+- **A page changes with what it describes.** A change to FinStats, FinUI or FinMotion that a page here describes comes
   with a commit here in the same sitting, never later.
-- **`main` is what is released**, because a push to it publishes. Pages for a finstats version not yet released wait on a
-  branch named like finstats' own (`dev-2.3.0`) and are merged with the release; FinUI and FinMotion publish from their
+- **`main` is what is released**, because a push to it publishes. Pages for a FinStats version not yet released wait on a
+  branch named like FinStats' own (`dev-2.3.0`) and are merged with the release; FinUI and FinMotion publish from their
   `main` on every push, so their pages go to `main` here when their change does.
-- **`docs/finstats/api.md` is the HTTP contract the finstats UI is written against**: an endpoint and its entry change
-  together. finstats' local QA reads it from here (`../docs/docs/finstats/api.md`) and fails on a route it does not list.
+- **`docs/finstats/api.md` is the HTTP contract the FinStats UI is written against**: an endpoint and its entry change
+  together. FinStats' local QA reads it from here (`../docs/docs/finstats/api.md`) and fails on a route it does not list.
 - **The privacy and security promises are promises.** `finstats/privacy.md`, `finstats/security.md` and the sentences on
-  outbound connections must stay true to the code; a new outbound destination in finstats appears in them in the same
-  change that adds it (finstats' `outbound.rs` names the same sentences).
-- **The "How finstats is built" note** on `finstats/index.md` repeats the blockquote in finstats' README: test-first,
+  outbound connections must stay true to the code; a new outbound destination in FinStats appears in them in the same
+  change that adds it (FinStats' `outbound.rs` names the same sentences).
+- **The "How FinStats is built" note** on `finstats/index.md` repeats the blockquote in FinStats' README: test-first,
   reviewed, `cargo test` in CI, each release run against a real server. If one of those stops being true, both change.
   It names no model version.
-- **Docs point at the published image** (`ghcr.io/finstats/finstats`), never a locally built tag; finstats' QA checks
+- **Docs point at the published image** (`ghcr.io/finstats/finstats`), never a locally built tag; FinStats' QA checks
   `finstats/install.md` and `finstats/imports/jellystat.md` for it.
 - **Screenshots show invented data only** (people, titles, artwork, addresses: "alice", "Big Buck Bunny",
-  `192.168.1.10`, `203.0.113.0/24`). finstats' `qa/run.sh screenshots` writes them into `docs/assets/screenshots/` here
+  `192.168.1.10`, `203.0.113.0/24`). FinStats' `qa/run.sh screenshots` writes them into `docs/assets/screenshots/` here
   from its demo data; look at them before committing.
-- **Nothing from another host.** The theme is `font: false` and the fonts are bundled, as finstats bundles its own; the
+- **Nothing from another host.** The theme is `font: false` and the fonts are bundled, as FinStats bundles its own; the
   site may link out but loads nothing from elsewhere.
 - The colours in `assets/extra.css` are FinUI's (`tokens.css`): washi paper by day, Obsidian by night.
 
 ## No em-dashes
 
-**No em-dash is used anywhere in the fin\* repositories on GitHub** (finstats, FinUI, FinMotion, docs): not in pages,
+**No em-dash is used anywhere in the fin\* repositories on GitHub** (FinStats, FinUI, FinMotion, docs): not in pages,
 code, comments or commit messages (the owner's decision, 2026-10-07). Where a sentence wants one, rewrite the sentence:
 a full stop, a colon, a semicolon, commas, parentheses or a joining word. Another dash in its place (a hyphen, an en
 dash, two hyphens) or an escape for the character is not a rewrite. The Pages workflow refuses one.
 
 ## Git conventions
 
-The same as finstats:
+The same as FinStats:
 
 - Conventional-commit subjects with a scope where one fits: `docs(finstats):`, `docs(finui):`, `docs(finmotion):`,
   `ci:`, `chore:`. The subject says what changed; the body says why.
@@ -83,4 +83,4 @@ Pages, screenshots and commit messages use invented data only, never a value fro
 
 ## Licensing
 
-GPL-3.0-only, as finstats, FinUI and FinMotion (`LICENSE`). The fonts are OFL-1.1 with their licences beside them.
+GPL-3.0-only, as FinStats, FinUI and FinMotion (`LICENSE`). The fonts are OFL-1.1 with their licences beside them.

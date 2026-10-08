@@ -1,6 +1,6 @@
-# finstats docs
+# FinStats docs
 
-The documentation for [finstats](https://github.com/finstats/finstats), [FinUI](https://github.com/finstats/finui) and
+The documentation for [FinStats](https://github.com/finstats/finstats), [FinUI](https://github.com/finstats/finui) and
 [FinMotion](https://github.com/finstats/finmotion), published at **[finstats.no](https://finstats.no/)**.
 
 Every page is Markdown under `docs/`, built with [MkDocs](https://www.mkdocs.org) and
@@ -33,5 +33,5 @@ docs/assets/        screenshots, the logo, the bundled fonts and the site's CSS
 
 ## Licence
 
-GPL-3.0-only, as finstats, FinUI and FinMotion (`LICENSE`). The bundled fonts are under the SIL Open Font License 1.1;
+GPL-3.0-only, as FinStats, FinUI and FinMotion (`LICENSE`). The bundled fonts are under the SIL Open Font License 1.1;
 their licences are beside them in `docs/assets/fonts/`.

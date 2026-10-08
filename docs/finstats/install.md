@@ -36,8 +36,8 @@ Then open **http://your-server:8080** and:
 1. Enter your Jellyfin address and test the connection.
 2. Sign in with a Jellyfin administrator account.
 
-That's it. finstats starts watching immediately and fills in your library in the background. The `data` folder is
-created for you; finstats makes it its own and then runs as an ordinary, unprivileged user (1000:1000, or whatever you
+That's it. FinStats starts watching immediately and fills in your library in the background. The `data` folder is
+created for you; FinStats makes it its own and then runs as an ordinary, unprivileged user (1000:1000, or whatever you
 set with `PUID` and `PGID`). Set `TZ` to your own timezone so "today" and "evening" mean what you expect.
 
 !!! tip "Inside a container, `localhost` is the container itself"
