@@ -56,6 +56,8 @@ Session = {
   "started_at": 1790000000, "watched_s": 498,
   "client": "Jellyfin Web", "device_name": "Firefox", "app_version": "10.11.0",
   "remote_ip": "…"|null,      // null for non-admins
+  "is_local": true|false|null, // from home (a private address, or this network's public one), as the play's row says;
+                              // null without see_network, as the address is, or without an address
   "play_method": "DirectPlay" | "DirectStream" | "Transcode",
   "video": "HEVC 1080p HDR10"|null, "audio": "EAC3 5.1"|null, "subtitle": "eng (subrip)"|null,
   "container": "mkv"|null, "bitrate": 8500000|null,
