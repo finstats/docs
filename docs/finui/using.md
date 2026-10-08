@@ -2,7 +2,7 @@
 
 Copy the folder, or let the installer above copy it.
 Load the stylesheets in `registry.json`'s order (`tokens.css`, `base.css`, then each component's CSS),
-either as separate `<link>`s or as one file joined in that order (finstats serves them joined, as `/assets/finui.css`).
+either as separate `<link>`s or as one file joined in that order (FinStats serves them joined, as `/assets/finui.css`).
 Then import what you need:
 
 ```js

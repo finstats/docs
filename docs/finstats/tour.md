@@ -1,6 +1,6 @@
 # A tour of the pages
 
-Every page of finstats, whole, from top to bottom, with generated demo data (invented people, titles and artwork).
+Every page of FinStats, whole, from top to bottom, with generated demo data (invented people, titles and artwork).
 To click through it yourself, [try the demo](https://demo.finstats.no/).
 
 ## Dashboard

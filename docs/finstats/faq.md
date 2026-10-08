@@ -7,14 +7,14 @@ small question a second, which is what keeps pauses and skips exact, and it read
 after Jellyfin has finished its own scan.
 
 ## Where is my data, and how do I back it up?
-finstats backs itself up every week into `data/backups` and keeps the newest five; download them under
+FinStats backs itself up every week into `data/backups` and keeps the newest five; download them under
 **Settings → Backups**, where you can also restore one into a new install. A backup has your whole history,
 settings and permissions, but never your Jellyfin API key. The database itself is the single file `data/finstats.db`.
 
 ## It says "cannot write to its data directory".
-The `data` folder belongs to a different user than the one finstats runs as. This happens when you start the
+The `data` folder belongs to a different user than the one FinStats runs as. This happens when you start the
 container with `--user` (or `user:` in Compose) on a folder Docker created as root. Either drop that setting, so
-finstats can fix the folder itself, or run `sudo chown -R 1000:1000 ./data`.
+FinStats can fix the folder itself, or run `sudo chown -R 1000:1000 ./data`.
 
 ## Can I put it behind a reverse proxy?
 Yes. Forward to port 8080 and set `FINSTATS_TRUST_PROXY=1`. Sign-in cookies are marked secure

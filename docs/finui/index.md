@@ -1,6 +1,6 @@
 # FinUI
 
-The components [finstats](https://github.com/finstats/finstats) is built from, sixty-eight of them: buttons, fields,
+The components [FinStats](https://github.com/finstats/finstats) is built from, sixty-eight of them: buttons, fields,
 checkboxes, sliders, date pickers and code inputs; cards, tables that sort by meaning, tabs, steps and timelines; dialogs
 that stack, drawers, popovers, menus and toasts; and charts (bars, lines, donuts, heatmaps) that read only tokens.
 Vanilla ES modules and plain CSS, no build step and no dependencies, light and dark from one set of tokens.
@@ -36,10 +36,10 @@ component that only looks right is no component.
 
 ## Where it is made
 
-FinUI's components are developed inside finstats (`web/assets/finui`), where every one of them is used and tested, and
+FinUI's components are developed inside FinStats (`web/assets/finui`), where every one of them is used and tested, and
 copied here as they change; the gallery and FinUI create live here only. Issues and changes are welcome in either place.
 
 ## Licence
 
-FinUI is free software under the [GNU General Public License v3.0](https://github.com/finstats/finui/blob/main/LICENSE) only, like finstats. The bundled fonts are
+FinUI is free software under the [GNU General Public License v3.0](https://github.com/finstats/finui/blob/main/LICENSE) only, like FinStats. The bundled fonts are
 under the SIL Open Font License 1.1; their licences are in `fonts/`.
