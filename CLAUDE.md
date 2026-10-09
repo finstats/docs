@@ -58,6 +58,12 @@ docs/assets/        screenshots/, logo.svg, fonts/ (Inter and JetBrains Mono, OF
   site may link out but loads nothing from elsewhere.
 - The colours in `assets/extra.css` are FinUI's (`tokens.css`): washi paper by day, Obsidian by night.
 
+## Logos
+
+The logos' masters, their PNGs and the brand guidelines live in the branding repository (`../FinBranding`).
+This repository keeps byte-identical copies of the three SVGs it serves, `docs/assets/logo.svg`, `mark-light.svg` and `mark-dark.svg`: the rounded tile for the README and the favicon, the bare marks for the header. A logo changes
+there first and is copied here in the same sitting; no other logo file (a `logo/` folder of PNGs) belongs here.
+
 ## No em-dashes
 
 **No em-dash is used anywhere in the fin\* repositories on GitHub** (FinStats, FinUI, FinMotion, docs): not in pages,
