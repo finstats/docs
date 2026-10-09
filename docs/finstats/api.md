@@ -413,7 +413,9 @@ known, or no `parts`, is every key below.
 {
   "concurrency": {"peak": 4, "peak_at": 1790000000|null,
                   "peak_transcodes": 2, "peak_direct_streams": 1, "peak_direct_plays": 3,   // the most of each at once, each its own maximum
-                  "series": [{"date": "2026-01-31", "peak": 3}], "bucket": "day"|"week"},   // gap-free, same bucketing as overview.daily
+                  "series": [{"date": "2026-01-31", "peak": 3,                              // gap-free, same bucketing as overview.daily
+                              "by": {"Transcode": 1, "DirectStream": 0, "DirectPlay": 2}}],   // the most of each at once in the bucket
+                  "bucket": "day"|"week"},
   "network": [Bucket],            // names "Local" / "Remote" / "Unknown"; [] for non-admins
   "data_bytes": 1234567890,       // estimated bytes sent to clients (stream bitrate × time watched)
   "genres": [Bucket],             // by watch time; episodes count towards their series' genres; max 12 + "Other"
@@ -423,6 +425,29 @@ known, or no `parts`, is every key below.
   "failed_logins": [ {"date": 0, "overview": "…", "user_name": null} ]   // 🔒 newest 10 in window; [] for non-admins
 }
 ```
+
+## `GET /api/stats/split?group=&by=&sort=&limit=` (common filters): plays by one thing, split by another
+
+What Simple mode's Graphs draw. `group` is required (anything else is a 400): `client`, `user`, `source_resolution` (the
+file's), `stream_resolution` (what a video transcode sent, else the file's) are ranked rows; `day` and `month` are a
+gap-free series. `by` is `type` (the default: kinds of media) or `method` (how it played). Ranked rows are by plays, or by
+time watched with `sort=watch`; `limit` is 1 to 50 (default 10). Without `see_everyone` every row is the caller's own plays.
+
+```jsonc
+{
+  "keys": ["Movie", "Episode", "Audio", "Other"],   // by=method: ["DirectPlay", "DirectStream", "Transcode"]
+  "bucket": null,                                   // "day"|"week" for group=day (overview.daily's rule), "month" for group=month
+  "rows": [
+    {"id": "…"|null,                                // the person's id for group=user, else null
+     "name": "Jellyfin Web",                        // group=day|month: "date": "2026-01-31" | "2026-01" instead of id and name
+     "plays": 3, "watch_s": 1100,
+     "by": {"Movie": [1, 600], "Episode": [1, 300], "Audio": [1, 200], "Other": [0, 0]}}   // [plays, watch_s] per key
+  ]
+}
+```
+
+A play that never said how it played counts in its row and in no part of `by=method`. Plays without a resolution
+(music) are in no resolution row.
 
 ## `GET /api/library/insights?library_id=`: what the library is made of (no time window)
 
