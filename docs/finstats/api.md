@@ -58,6 +58,7 @@ Session = {
   "remote_ip": "…"|null,      // null for non-admins
   "is_local": true|false|null, // from home (a private address, or this network's public one), as the play's row says;
                               // null without see_network, as the address is, or without an address
+  "user_has_image": true,     // the person has a picture (/api/img/user), as when the play started
   "play_method": "DirectPlay" | "DirectStream" | "Transcode",
   "video": "HEVC 1080p HDR10"|null, "audio": "EAC3 5.1"|null, "subtitle": "eng (subrip)"|null,
   "container": "mkv"|null, "bitrate": 8500000|null,
@@ -88,7 +89,8 @@ carries the Monday date and `"bucket": "week"` is set at top level (otherwise `"
 ```jsonc
 {"rows": [ {"id": "…"|null, "name": "…", "sub": "2019"|null, "plays": 12, "watch_s": 3600,
             "users": 3,               // distinct users (absent for kind=users)
-            "image_item_id": "…"|null, "last_played": 1790000000} ]}
+            "image_item_id": "…"|null, "last_played": 1790000000,
+            "has_image": true, "has_backdrop": false} ]}   // movies/series/music: a poster, a backdrop; users: a picture
 ```
 Sorted by `watch_s` desc unless `&sort=plays` (plays first) or `&sort=users` (distinct viewers, then plays, then name;
 for `kind=users`, which has no viewers to count, the default order). Any other `sort` is the default order.
@@ -206,7 +208,7 @@ name: FinStats does not read Jellyfin's artist items.
            "container","size_bytes","bitrate","video":"HEVC 1080p"|null,"audio":null,"path":"…"|null /* 🔒 */,
            "has_image": true /* own primary image; an episode without one shows its series' poster */, "has_backdrop": true},
   "totals": {"plays","watch_s","users","last_played_at"},
-  "watchers": [{"user_id","user_name","plays","watch_s","last_played_at"}],
+  "watchers": [{"user_id","user_name","has_image","plays","watch_s","last_played_at"}],
   "seasons": [ {"id","name","season_number","episodes":[{"id","name","episode_number","runtime_s","plays","watch_s"}]} ], // Series only, else []
   "daily": [...], "bucket": "day"
 }
