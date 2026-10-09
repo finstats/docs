@@ -90,7 +90,8 @@ carries the Monday date and `"bucket": "week"` is set at top level (otherwise `"
 {"rows": [ {"id": "…"|null, "name": "…", "sub": "2019"|null, "plays": 12, "watch_s": 3600,
             "users": 3,               // distinct users (absent for kind=users)
             "image_item_id": "…"|null, "last_played": 1790000000,
-            "has_image": true, "has_backdrop": false} ]}   // movies/series/music: a poster, a backdrop; users: a picture
+            "has_image": true, "has_backdrop": false,      // movies/series/music: a poster, a backdrop; users: a picture
+            "item_exists": true} ]}                        // movies/series/music: false → no longer in the library, don't link
 ```
 Sorted by `watch_s` desc unless `&sort=plays` (plays first) or `&sort=users` (distinct viewers, then plays, then name;
 for `kind=users`, which has no viewers to count, the default order). Any other `sort` is the default order.
@@ -164,8 +165,8 @@ the trash. Whoever watched with it is grouped again without it, and with it once
 ```jsonc
 {"users": [ {"id","name","is_admin","is_disabled","removed","has_image",
              "last_login_at","last_activity_at","plays","watch_s","last_played_at",
-             "last_item_name","last_item_id","last_client","last_device",
-             "last_ip"} ]}   // of their last play; last_ip is null without see_network
+             "last_item_name","last_item_id","last_item_exists","last_client","last_device",
+             "last_ip"} ]}   // of their last play; last_ip is null without see_network; last_item_exists false → don't link
 ```
 
 `GET /api/users/{id}`
@@ -189,7 +190,7 @@ the trash. Whoever watched with it is grouped again without it, and with it once
 {"libraries": [ {"id","name","collection_type","removed","item_count",
                  "movie_count","series_count","season_count","episode_count","artist_count","album_count","track_count",
                  "size_bytes","plays","watch_s","last_played_at",
-                 "last_item_id","last_item_name","last_series_name"|null,"last_item_type"} ]}  // what that last play was
+                 "last_item_id","last_item_name","last_series_name"|null,"last_item_type","last_item_exists"} ]}  // what that last play was
 ```
 The counts are what the library holds now (removed items left out) and take no filter; `plays`, `watch_s`,
 `last_played_at` and the `last_item_*` of that play follow the window and whose plays the caller may see. `artist_count` is the album artists its tracks
@@ -426,6 +427,17 @@ known, or no `parts`, is every key below.
   "behaviour": {"plays_measured": 120, "avg_pauses": 1.4, "avg_seeks": 0.8, "resumed_share": 0.31}, // live plays only; plays_measured = 0 → hide
   "failed_logins": [ {"date": 0, "overview": "…", "user_name": null} ]   // 🔒 newest 10 in window; [] for non-admins
 }
+```
+
+## `GET /api/stats/spans?user_id=|library_id=`: a profile's four figures
+
+One person's or one library's plays and time today, over the last 7 and 30 days and ever, counted as `days=` counts them
+everywhere, in one pass, with whose or which they are: the person's row as `/api/users` gives it, or the library's as
+`/api/libraries` does. Without `see_everyone` a `user_id` is the caller's own, as everywhere.
+
+```jsonc
+{"user": {UserRow}|null, "library": {LibraryRow}|null,
+ "spans": [{"days": 1, "plays": 2, "watch_s": 5400}, {"days": 7, …}, {"days": 30, …}, {"days": 0, …}]}   // 0 = all time
 ```
 
 ## `GET /api/stats/split?group=&by=&sort=&limit=` (common filters): plays by one thing, split by another
@@ -1742,7 +1754,9 @@ names are `/assets/finui/create/presets.json`, FinUI's file.
 
 ## A title's page in Jellyfin, from anywhere
 
-`/api/auth/me` gains `user.jellyfin_details`: a title's page in Jellyfin is this followed by its id.
+`/api/auth/me` gains `user.jellyfin_details`: a title's page in Jellyfin is this followed by its id. It also says
+`user.public_url`, the address FinStats is reached at without a trailing slash (`null` when none is set), for links made
+in a page such as a calendar feed's: the settings that hold it are a manager's to read.
 It reads like `"https://jellyfin.example.com/web/#/details?id="` and comes from the address an administrator set for "Open in Jellyfin", else the one
 FinStats connects to; `null` before Jellyfin is set up. The context menu offers "Open in Jellyfin" on any link to a title
 with it, where the answer that drew the link had no `jellyfin_link` to give.
