@@ -166,7 +166,7 @@ the trash. Whoever watched with it is grouped again without it, and with it once
 {"users": [ {"id","name","is_admin","is_disabled","removed","has_image",
              "last_login_at","last_activity_at","plays","watch_s","last_played_at",
              "last_item_name","last_item_id","last_item_exists","last_client","last_device",
-             "last_ip"} ]}   // of their last play; last_ip is null without see_network; last_item_exists false → don't link
+             "last_ip"} ]}   // of their last play (all time, at least min_play_s long); last_ip is null without see_network; last_item_exists false → don't link
 ```
 
 `GET /api/users/{id}`
@@ -1476,7 +1476,7 @@ browser that happens to be signed in. A `calendar`-scoped key is meant for it; a
 The answer is `text/calendar; charset=utf-8`, `Cache-Control: private, no-store`, CRLF line ends, folded at 75 octets:
 
 ```
-BEGIN:VCALENDAR / VERSION:2.0 / PRODID:-//finstats//EN / CALSCALE:GREGORIAN / METHOD:PUBLISH / X-WR-CALNAME:finstats: coming up
+BEGIN:VCALENDAR / VERSION:2.0 / PRODID:-//finstats//EN / CALSCALE:GREGORIAN / METHOD:PUBLISH / X-WR-CALNAME:FinStats: coming up
 BEGIN:VEVENT
 UID:{service_id}-{episode|movie}-{external_id}-{release}@finstats     // the upcoming row's own key, stable across syncs
 DTSTAMP:…Z
@@ -1850,7 +1850,8 @@ read, never on a request; `null` before the first time.
 }
 ```
 
-`Moment` = `{at, streams, transcodes, hardware, software, unsaid}`: every stream counts, whatever its length; a transcode
+`Moment` = `{at, streams, transcodes, hardware, software, unsaid}`: every stream counts, whatever its length, except plays
+imported from Tautulli, which are Plex's, another server's; a transcode
 is in hardware, in software (Jellyfin said it used none) or unsaid (an older server, or an imported play). A transcode
 that kept the picture (only the sound or the container converted) makes no video and counts as direct, as on the
 Playback page's hardware chart. A spell is
@@ -1885,5 +1886,6 @@ Anyone signed in, by the session cookie or a full key; a calendar key is refused
 feed, and the feed still never takes the cookie. Upcoming's own query: `days` 1–90 (default 14, clamped), `mine=true` for
 only the shows the person follows, `user_id` for somebody else's agenda, honoured only with *see everyone* (without it,
 always the caller's own). The events are the feed's, built by the same code (`entries_for`, then one `VEVENT` each), so
-for the same person and filters the two carry the same events, and it names nobody. A read: not audited, and nothing is
+for the same person and filters the two carry the same events, and it names nobody. Somebody else's agenda says no "You
+watch this": the file goes into the calendar of whoever exported it. A read: not audited, and nothing is
 asked of Sonarr, Radarr or Seerr.
