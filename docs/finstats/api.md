@@ -1783,6 +1783,7 @@ Every message is a JSON text frame. The page sends:
 {"type": "subscribe", "topics": ["now_playing", "summary"]}   // the whole state of each comes at once
 {"type": "unsubscribe", "topics": ["downloads"]}
 {"type": "visible", "visible": true}                            // the tab is on screen (or not)
+{"type": "ping"}                                                // does this connection still carry? answered pong at once
 ```
 
 FinStats sends:
@@ -1793,14 +1794,22 @@ FinStats sends:
 {"type": "downloads", "v": 1, "data": {…}}                                       // GET /api/downloads (needs see what is downloading)
 {"type": "summary", "v": 1, "data": {…}}                                         // GET /api/summary
 {"type": "denied", "v": 1, "topic": "downloads"}                                // not permitted, or no longer
+{"type": "pong", "v": 1}                                                         // the answer to a ping, and nothing else
 ```
+
+A path that dies without closing (a laptop woken, a proxy that dropped it) closes nothing on the page's side, and on a
+quiet evening nothing is pushed: FinStats' own pages ping every 30 s while visible and when shown again, and poll as below
+when no pong comes within ten seconds. FinStats gives up a connection whose page has not read what it was sent within
+ten seconds.
 
 `v` is the version of that topic's frame. Each `data` is built by the same function as the endpoint, for the person the
 connection speaks for: their own streams only without *see everyone*, no addresses without *see the network*. A frame is
 sent when the answer changes and never twice the same:
 
-- `now_playing` when a stream begins, ends, pauses, resumes, changes item, play method, audio or subtitle track or group,
-  or seeks. A position only moving on is not pushed: positions travel with each frame, and the page counts the clock.
+- `now_playing` when one of *their* streams begins, ends, pauses, resumes, changes item, play method, audio or subtitle
+  track or group, or seeks: somebody else's stream changing sends nothing to a person who sees only their own. A position
+  only moving on is not pushed: positions travel with each frame, and the page counts the clock. A tab that says it is
+  visible again is sent it at once, since a browser slows a hidden tab's clocks.
 - `downloads` when the queue was read again (every 5 s while somebody looks, as before).
 - `summary` when somebody begins or ends a play, when the collector's state changes, and otherwise every 30 s.
 
@@ -1833,7 +1842,8 @@ read, never on a request; `null` before the first time.
   "recent_days": 90,
   "free_space_reported": true,  // Jellyfin 10.11 and newer report it; without it there are no disks, growth only
   "disks": [ {"folders": ["/media/films"], "libraries": ["Films"], "free_bytes": 0, "used_bytes": 0,
-              "added_per_month": 0, "months_left": 9.4 | null} ],   // null: nothing was added in the window
+              "added_per_month": 0, "months_left": 9.4 | null,     // null: nothing was added in the window
+              "window_months": 6, "young": false} ],                // the window this disk was measured over; young: too new to say
   "growth": [ {"library": "Films", "added_bytes": 0} ],              // over the window, by library
   "window_months": 6,
   "findings": [Finding]
@@ -1841,12 +1851,17 @@ read, never on a request; `null` before the first time.
 ```
 
 `Moment` = `{at, streams, transcodes, hardware, software, unsaid}`: every stream counts, whatever its length; a transcode
-is in hardware, in software (Jellyfin said it used none) or unsaid (an older server, or an imported play). A spell is
+is in hardware, in software (Jellyfin said it used none) or unsaid (an older server, or an imported play). A transcode
+that kept the picture (only the sound or the container converted) makes no video and counts as direct, as on the
+Playback page's hardware chart. A spell is
 from the first stream starting to the last one ending; an evening of episodes back to back is one.
 
-A disk is the library folders that report the same device and the same free space in one reading. It fills by the files
-under its folders that Jellyfin added in the last `window_months` (by their date added, so a replaced file counts as new),
-and `months_left` is its free space at that pace.
+A disk is the library folders on the device Jellyfin names (the mount, or the drive on Windows), at the lowest free space
+read for them, since Jellyfin reads folder by folder; without a device, the folders that report the same free space. It
+fills by the files under its folders (`/` or `\`) that Jellyfin added in its window (by their date added, so a replaced
+file counts as new), and `months_left` is its free space at that pace. The window is `window_months` (six), or shorter on
+a disk filled more recently: a disk's first month is its filling, not its growth, so the pace is measured from a month after
+its first file, and a disk without a month of growth since then is `young`, with no pace (`added_per_month` 0).
 
 `Finding` = `{key, kind, title, evidence, found_at, dismissed, note, dismissed_at, dismissed_by}`:
 
@@ -1854,7 +1869,7 @@ and `months_left` is its free space at that pace.
 |---|---|
 | `software_transcodes` | `{days, plays, transcodes, software, hardware, unsaid, most_at_once}`: in the last 90 days, at least 20 transcodes Jellyfin said either way about, none of them in hardware, and transcodes a quarter of plays or more. |
 | `scan_busy` | `{interval_s, last_duration_s, duty_pct, items}`: Jellyfin's library scan, by its own last run against its shortest interval, runs a quarter of the time or more. |
-| `runway` | `{folders, libraries, free_bytes, added_per_month, months_left, window_months}`: a disk with under six months of space at that pace; said again under three and under one. |
+| `runway` | `{folders, libraries, free_bytes, added_per_month, months_left, window_months}`: a disk with under six months of space at that pace (over its own window); said again under three and under one. |
 
 Findings are dismissed and brought back with Library health's `POST /api/library/health/dismiss` and `…/undismiss`
 (*manage FinStats* and *see server details*, audited as `finding_dismissed` / `finding_undismissed`). A dismissal holds
