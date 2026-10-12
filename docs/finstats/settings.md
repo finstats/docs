@@ -4,6 +4,7 @@ Everything works out of the box. If you want to tune it, **Settings** in the app
 
 | | |
 |---|---|
+| **Language** | Settings → Appearance → Language: British or American English, Norwegian Bokmål or Norwegian Nynorsk, for this browser. Until you choose, FinStats follows the browser's own language, and anything it does not speak is British English. Numbers, dates and units are written the language's way. |
 | **Access** | Who may sign in and what they may see, for everyone or per person: *sign in*, *see everyone's activity*, *see network details*, *see the server*, *manage FinStats*. Jellyfin administrators always have everything, and only they can change this. |
 | **Jellyfin's address for people** | Where every title's *Open in Jellyfin* button points: your Jellyfin's address from outside, when that is not the one FinStats connects to (a container name, a LAN address). Empty: the address FinStats connects to. Jellyfin administrators only. |
 | **API keys** | Your own keys for scripts and calendars, with a scope and an expiry; shown once, revoked with a click. Every signed-in user has this section; administrators see everyone's keys. |

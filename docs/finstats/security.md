@@ -8,7 +8,8 @@ A session follows the person as Jellyfin has them now, not as they were when the
 FinStats has read Jellyfin's users (every 15 minutes, or at once from Settings), an administrator
 Jellyfin demoted is no longer one here, and somebody it disabled or deleted is signed out. One person
 keeps at most 30 sessions; the oldest is signed out at the next sign-in. Attempts are rate limited to
-10 per 5 minutes per address.
+10 per 5 minutes per address. The only other cookie FinStats sets is `finstats_lang`, the language the page reads in (`nb-NO` and the like),
+so that a picture the browser fetches by itself, such as a Recap card, is drawn in it; it says nothing about who you are.
 
 **API keys.** Anyone signed in may make keys for themselves under Settings → API keys, for a script,
 a dashboard or a phone's calendar. A key is a second credential for the same person and nothing

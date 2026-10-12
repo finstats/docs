@@ -11,6 +11,7 @@ permissions; a request carrying both is judged on the header alone.
 - **Dates** in time series are `YYYY-MM-DD` in the server's local timezone (`TZ` env).
 - **IDs** are Jellyfin IDs: 32 lowercase hex chars, no dashes.
 - **Errors**: non-2xx status with `{"error": "human readable message"}`.
+  The message is in the language `Accept-Language` asks for (see *Language* below).
   `401` = not logged in (also an expired, revoked or malformed API key), `403` = not allowed (also a
   calendar-scoped key anywhere but the feed), `409` = wrong state (e.g. already configured).
 - **Common filters** (query string) on every `/api/stats/*`, `/api/activity`, `/api/users*`,
@@ -22,6 +23,12 @@ permissions; a request carrying both is judged on the header alone.
 - **A filter that names several values** uses commas, and naming nothing means all of them,
   so `?type=` and no `type` at all are the same request. Values are de-duplicated and at most 50
   are read, so no caller can grow the SQL by repeating or padding them.
+- **Language**: whatever the server answers in words (error messages, the Patch notes, the Recap's cards, a
+  Jellyfin job's explanation, a task's result) is in the first language of `Accept-Language` that FinStats speaks:
+  `en-GB` (also any `en` but `en-US`), `en-US`, `nb-NO` (also `nb` and `no`), `nn-NO` (also `nn`); weights are
+  honoured, and anything else is `en-GB`. Ids, kinds and states (`"kind": "Added"`, `"state": "watched"`) never change
+  with the language. The pages send the language chosen in Settings → Appearance; the words they draw themselves come from
+  `/assets/i18n/<tag>.json`, one catalogue per language.
 - **Non-admin users** are always scoped to their own `user_id` server-side, whichever and however
   many the URL names: a user filter can narrow what somebody sees and never widen it. They also
   never see IP addresses, and get `403` on admin endpoints (marked 🔒).
@@ -572,7 +579,8 @@ Default: the year whose recap is "ready": the current year during December, othe
 
 # v0.4: Patch notes
 
-`GET /api/changelog` (any signed-in user): `CHANGELOG.md`, compiled into the binary and parsed.
+`GET /api/changelog` (any signed-in user): `CHANGELOG.md`, compiled into the binary and parsed, or (2.3.0) its
+translation into the language `Accept-Language` asks for (`changelog/<tag>.md`, the same releases and groups; `kind` stays English).
 
 ```jsonc
 {
