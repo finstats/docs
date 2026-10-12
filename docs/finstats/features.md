@@ -93,7 +93,8 @@ Every film and show lists its cast and crew, and every actor and director has a 
 what they are in on your server, and how much of it has been watched.
 
 Renamed a file? Jellyfin treats it as a new item and orphans its history. FinStats notices and
-re-attaches the old plays to the new entry.
+re-attaches the old plays to the new entry, when it can tell which one that is without guessing: a track
+only on the same album by the same artist, since half the albums there are have an "Intro".
 
 ## Who watches together
 When two or more people press play on the same thing at the same time, FinStats notices: which

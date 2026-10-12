@@ -129,7 +129,7 @@ existed, so adding one cannot replay a year of history at you.
 - **Who may add one.** Only a Jellyfin administrator can add a destination for the server. Anybody else needs the *Be sent notifications*
   permission, their destination may only point at a public address (not something inside your network), and it is sent only what that person
   can already see in FinStats: their own requests and alerts, somebody else's plays only if they may see everyone's activity, addresses only
-  if they may see network details.
+  if they may see network details. Taking the permission away stops what their destinations are sent, at once.
 - **No redirect is followed**, for the same reason as everywhere else: a token must not travel to wherever a redirect points. The three
   services whose address is their own (Telegram, Pushover, Pushbullet) are reached at that address and no other, so a token issued by one
   of them can never be posted to a look-alike host.

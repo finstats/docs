@@ -879,7 +879,8 @@ Addresses get a place (country, city, a city-centre coordinate) from a city data
 ```
 Places count plays in the window plus successful sign-ins (`AuthenticationSucceeded` in Jellyfin's activity log).
 
-`GET /api/security/alerts?status=open|resolved|all&user_id=&page=&per_page=` (default `open`, 25 per page, at most 100)
+`GET /api/security/alerts?status=open|resolved|all&user_id=&page=&per_page=` (default `open`, 25 per page, at most 100; `user_id`
+may name several people, comma-separated, as every filter does)
 ```jsonc
 { "total": 3, "open": 2, "page": 1, "per_page": 25,
   "rows": [ {"id": 1, "kind": "impossible_travel" | "new_country", "severity": "high" | "medium",
@@ -1046,7 +1047,7 @@ connecting a service or a read of Seerr all refresh it at once. The prefetcher n
              "error": "One file was not imported" | null,         // Sonarr's or Radarr's words, with any login or key in an address blanked
              "poster": {"item_id": "…"} | {"service_id": 1, "media_id": 12} | null,
              "item_id": "…" | null,
-             "requested_by": {"user_id": "…" | null, "user_name": "maria"} | null} ],
+             "requested_by": {"user_id": "…" | null, "user_name": "maria"} | null} ],   // one's own wish always, anybody else's only with see everyone
   "totals": {"down_bps": 0, "downloading": 3, "queued": 1, "importing": 1, "failed": 0},
   "at": 0, "sources": 2,
   "problems": [{"service": "Radarr", "error": "…"}] }
@@ -1161,7 +1162,8 @@ nothing is recorded for it. Hosts (with ports) only: never a path, never a key.
 Where what FinStats finds is sent. A destination belongs either to the **server** (Jellyfin administrators) or to **one
 person** (anybody with `notify`), and FinStats sends nothing at all until one exists: no destination, no request.
 
-Every route here needs `notify`, which administrators always have. A person sees and may touch only their own
+Every route here needs `notify`, which administrators always have, and so does being sent anything: a person it is taken
+from is sent nothing more, checked again before every try. A person sees and may touch only their own
 destinations; an administrator sees every one. **A destination's address is never given back**: a Discord webhook URL
 carries its own token, so the answer holds the host and a hint (`shown`), and editing without a new `url` keeps the
 stored one, the way a service's API key does.
@@ -1458,7 +1460,7 @@ Two scopes. `full` opens everything its holder may see. `calendar` opens `GET /a
 |---|---|---|---|
 | GET | `/api/keys` | – | `{keys: [{id, name, scope, user_id, user_name, has_image, created_at, expires_at, last_used_at, last_used_ip, mine}]}`: the caller's live keys; a Jellyfin administrator's list holds everyone's. Never the key itself. |
 | POST | `/api/keys` | `{name (1–60), scope: "full"\|"calendar", expires_in_d?: 1..3650}` | `201 {id, key, name, scope, created_at, expires_at}`, the only time `key` is ever answered. At most 20 live keys per person (`409`). |
-| DELETE | `/api/keys/{id}` | – | `{ok: true}`; a soft revoke that stops the key on its next request. Own keys, or anyone's for an administrator; `404` otherwise, and for a key already revoked. |
+| DELETE | `/api/keys/{id}` | – | `{ok: true}`; the key is gone and stops on its next request (the audit log keeps the record). Own keys, or anyone's for an administrator; `404` otherwise, and for a key already revoked. |
 
 Both writes need a **session**: a request authenticated by a key cannot mint or revoke keys (`403`), so a leaked key
 has no successors. `last_used_at`/`last_used_ip` are written at most once a minute per key.
