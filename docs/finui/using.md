@@ -19,6 +19,24 @@ Fonts are Inter and JetBrains Mono, in `fonts/` beside `base.css`.
 `registry.json` lists every component with its files, the tokens its CSS reads and the components it is built with.
 FinUI's rule checker and tests are kept privately, not in this repository, and run before every change is published.
 
+## In another language
+
+The words a component writes itself (a dialog's *Close*, an error's *Try again*, a table's *No results*) are English
+until the app hands FinUI its own, and numbers and dates are written in the app's language. `i18n.js` is the whole of
+it: call `words()` once, before the components are drawn, with an object of texts by component and key and the
+language's tag (BCP 47):
+
+```js
+import { words } from './finui/i18n.js';
+
+words({ error: { title: 'Kunne ikke laste inn dette', try_again: 'Prøv igjen' } }, 'nb-NO');
+```
+
+A text may hold `{name}` placeholders, and a text that depends on a number is an object of plural forms
+(`{ "one": "…", "other": "{count} …" }`). A key FinUI is given no word for stays English. FinStats hands it the `finui`
+section of its own catalogues, so every key FinUI uses has a text there in British and American English, Bokmål and
+Nynorsk.
+
 ## With FinMotion
 
 FinUI is still on purpose: every component is plain and complete without movement, and installed as above it stays that
