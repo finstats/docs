@@ -25,8 +25,11 @@ permissions; a request carrying both is judged on the header alone.
   are read, so no caller can grow the SQL by repeating or padding them.
 - **Language**: whatever the server answers in words (error messages, the Patch notes, the Recap's cards, a
   Jellyfin job's explanation, a task's result) is in the first language of `Accept-Language` that FinStats speaks:
-  `en-GB` (also any `en` but `en-US`), `en-US`, `nb-NO` (also `nb` and `no`), `nn-NO` (also `nn`); weights are
-  honoured, and anything else is `en-GB`. Ids, kinds and states (`"kind": "Added"`, `"state": "watched"`) never change
+  a tag as written, else its language: `en-GB` (any `en` but `en-US`), `en-US`, `nb-NO` (`nb`, `no`), `nn-NO`, `da-DK`,
+  `de-DE`, `es-ES`, `fi-FI`, `fr-FR`, `hi-IN`, `is-IS`, `it-IT`, `ja-JP`, `ko-KR`, `nl-NL`, `pl-PL`, `pt-BR` (any `pt`),
+  `ru-RU`, `sv-SE`, `tr-TR`, `uk-UA`, `zh-CN` (`zh`, `zh-Hans`, `zh-SG`) and `zh-TW` (`zh-Hant`, `zh-HK`, `zh-MO`); weights
+  are honoured, and anything else is `en-GB`. A text a language does not have yet is said in `en-GB`; the Recap's and
+  the public profile's cards are drawn in `en-GB` for Japanese, Korean, Chinese and Hindi, whose letters the card font lacks. Ids, kinds and states (`"kind": "Added"`, `"state": "watched"`) never change
   with the language. The pages send the language chosen in Settings → Appearance; the words they draw themselves come from
   `/assets/i18n/<tag>.json`, one catalogue per language.
 - **Non-admin users** are always scoped to their own `user_id` server-side, whichever and however
