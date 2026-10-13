@@ -8,9 +8,9 @@ Coming from Plex? **Simple mode** is a second layout, chosen per browser in Sett
 and the stats alone, home, libraries, users, history and graphs, laid out the way a classic Plex stats server is. It loads
 only its own half of FinStats, so it is also the quickest way in.
 
-FinStats speaks **23 languages**: every page, the Patch notes and what the server says, with numbers and dates written
+FinStats speaks **24 languages**: every page, the Patch notes and what the server says, with numbers and dates written
 the way each language writes them. Each browser picks its own under Settings → Appearance → Language, or simply follows
-the browser. English and Norwegian are checked by the maintainer, who speaks them; the others were translated by Claude
+the browser. English and Norwegian, Synnmørsk (the maintainer's own dialect) included, are checked by the maintainer, who speaks them; the others were translated by Claude
 Opus 5.5 (high effort), an AI model, and nobody here can check them, so they may hold mistakes, and corrections from
 people who speak them are welcome.
 
