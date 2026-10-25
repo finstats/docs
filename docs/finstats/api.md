@@ -24,7 +24,9 @@ permissions; a request carrying both is judged on the header alone.
   so `?type=` and no `type` at all are the same request. Values are de-duplicated and at most 50
   are read, so no caller can grow the SQL by repeating or padding them.
 - **Language**: whatever the server answers in words (error messages, the Patch notes, the Recap's cards, a
-  Jellyfin job's explanation, a task's result) is in the first language of `Accept-Language` that FinStats speaks:
+  Jellyfin job's explanation, a task's result) is in the language `X-FinStats-Language` names exactly (the pages send
+  their own), else the one the `finstats_lang` cookie names (what the browser fetches by itself, a picture or a download),
+  else the first language of `Accept-Language` that FinStats speaks:
   a tag as written, else its language: `en-GB` (an `en` that names a country other than the US), `en-US` (`en`), `nb-NO` (`nb`, `no`), `nn-NO`, `da-DK`,
   `de-DE`, `es-ES`, `fi-FI`, `fr-FR`, `hi-IN`, `is-IS`, `it-IT`, `ja-JP`, `ko-KR`, `nl-NL`, `pl-PL`, `pt-BR` (any `pt`),
   `ru-RU`, `sv-SE`, `tr-TR`, `uk-UA`, `zh-CN` (`zh`, `zh-Hans`, `zh-SG`) and `zh-TW` (`zh-Hant`, `zh-HK`, `zh-MO`); weights
@@ -1781,7 +1783,8 @@ downloading, and the status bar's numbers. Pages still load over HTTP; the socke
 already shows has changed. Every endpoint it stands in for (`/api/now-playing`, `/api/downloads`, `/api/summary`) stays
 as it is, for scripts and as the fallback.
 
-`GET /api/live` with `Upgrade: websocket`. Credentials are the session cookie, or `Authorization: Bearer fs_…` for a
+`GET /api/live` with `Upgrade: websocket`, and `?lang=` with a language tag (`?lang=nb-NO`) for the language its frames speak (a WebSocket carries no header
+of the page's own; otherwise as any request). Credentials are the session cookie, or `Authorization: Bearer fs_…` for a
 client that is not a browser; **never a key in the address** (the calendar feed's `?key=` is that feed's alone) and never
 a calendar key (`403`). An `Origin` that is not FinStats' own is refused (`403`), exactly as for a write, so a page on
 another site cannot open it with the cookie its browser would attach; behind a reverse proxy `X-Forwarded-Host` counts
