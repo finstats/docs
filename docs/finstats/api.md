@@ -166,8 +166,8 @@ Play = {
 🔒 `PUT /api/activity/{id}` `{"deleted": true | false}` → `{"ok": true, "id": 123, "deleted": true, "deleted_at": 0|null, "purge_at": 0|null}`
 (`manage`). Moves a finished play into the trash, or back out of it; it is removed for good 30 days after it was
 deleted (`purge_at`), with its timeline. Asking for the state it is already in changes nothing and answers it (a second
-delete keeps the first `deleted_at`). `404` for no such play, a play still running, or (to restore) one that is not in
-the trash. Whoever watched with it is grouped again without it, and with it once it is back. `DELETE` answers `405`.
+delete keeps the first `deleted_at`). `404` for no such play, a play still running, (to restore) one that is not in
+the trash, or, without `see_everyone`, somebody else's play: whose plays may be moved is whose plays may be seen. Whoever watched with it is grouped again without it, and with it once it is back. `DELETE` answers `405`.
 
 ## Users
 

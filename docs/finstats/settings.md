@@ -29,7 +29,7 @@ Everything works out of the box. If you want to tune it, **Settings** in the app
 | `JELLYFIN_URL` + `JELLYFIN_API_KEY` | – | Skip the setup wizard. Set both or neither. |
 | `FINSTATS_PUBLIC_IP_URL` | – | Your own "what is my IP" service (any URL answering with the caller's address as plain text), used instead of the built-in ones. |
 | `FINSTATS_GEOIP_DB` | – | A city database (`.mmdb`, MaxMind format) to place addresses with, instead of the newest file in `data/geoip/`. |
-| `FINSTATS_ALLOW_LIBRARY_SHRINK` | off | Let a sync mark items, libraries or users removed even when the read comes back far emptier than what FinStats holds. Off by default: such a read is treated as a Jellyfin fault, the data is kept, and FinStats stops so you can look. Set to `1` after genuinely emptying a library. |
+| `FINSTATS_ALLOW_LIBRARY_SHRINK` | off | Let a sync mark items, libraries or users removed, or clear a person's played and favourite flags, even when the read comes back far emptier than what FinStats holds. Off by default: such a read is treated as a Jellyfin fault, the data is kept, and FinStats stops so you can look. Set to `1` after genuinely emptying a library. |
 | `FINSTATS_SKIP_PREUPDATE_BACKUP` | off | Skip the automatic full-database backup FinStats takes when a newer version first opens your data. On by default; the copy lands in `data/pre-update-backups/` before any upgrade touches the database, so you can roll back if something breaks. Set to `1` only if disk space is tight. |
 | `RUST_LOG` | `finstats=info` | Log detail, e.g. `finstats=debug`. |
 
