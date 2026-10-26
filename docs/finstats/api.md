@@ -1916,3 +1916,12 @@ asked of Sonarr, Radarr or Seerr.
 
 `GET /api/library/insights` takes `library_id=a,b`: the make-up of those libraries together. One id answers as before,
 and none is every library. The Libraries page and each library's own page pick them in the section's heading.
+
+# v2.3: The welcome
+
+The welcome is asked once a person, whichever browser they first sign in on; what it asks (the language, the formats, the
+colours, the layout) stays each browser's own choice.
+
+`GET /api/auth/me` → `user.welcomed`: whether this person has been through it, on any browser. `PUT /api/me/welcomed`
+(no body) → `{"welcomed": true}`: the caller has been, and nobody else; doing it again changes nothing. Anyone signed in;
+recorded once in the audit log as `welcomed`. It travels in a backup, and a restore keeps one this install already has.
