@@ -477,6 +477,9 @@ A play that never said how it played counts in its row and in no part of `by=met
 
 ## `GET /api/library/insights?library_id=`: what the library is made of (no time window)
 
+`library_id` names one library or several (`a,b`); without it the answer covers every library. An id no library has
+counts nothing.
+
 ```jsonc
 {
   "totals": {"files": 0, "size_bytes": 0, "runtime_s": 0, "movies": 0, "series": 0, "episodes": 0, "tracks": 0},
@@ -1905,3 +1908,8 @@ always the caller's own). The events are the feed's, built by the same code (`en
 for the same person and filters the two carry the same events, and it names nobody. Somebody else's agenda says no "You
 watch this": the file goes into the calendar of whoever exported it. A read: not audited, and nothing is
 asked of Sonarr, Radarr or Seerr.
+
+# v2.3: The make-up of several libraries
+
+`GET /api/library/insights` takes `library_id=a,b`: the make-up of those libraries together. One id answers as before,
+and none is every library. The Libraries page and each library's own page pick them in the section's heading.

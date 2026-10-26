@@ -34,7 +34,8 @@ people who speak them are welcome.
 - **Is it dubbed?** Every title shows the languages of its audio and subtitle tracks. A show says how far a dub goes
   ("English: 13 of 26 episodes"), and each episode lists its own, so you know before you start.
 - **What is my library made of?** Resolutions, codecs, HDR, size per decade, what was added when,
-  and the big one: **titles nobody has ever watched**, sorted by how much space they take.
+  and the big one: **titles nobody has ever watched**, sorted by how much space they take. For every library at once,
+  or only the ones you pick.
 
 ## Is the library in order?
 **Server → Library health** compares every file with its neighbours and lists what stands out, each with the numbers
