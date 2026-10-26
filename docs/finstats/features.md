@@ -50,7 +50,8 @@ deletes, rescans or fixes anything.
 once, how many of them transcoded, and whether Jellyfin used hardware for it (a history imported from Tautulli is
 Plex's, and is left out). How fast each disk fills with what is
 added ("films grew 41 GB a month over the last six months; at that pace about nine months of space are left"), where
-Jellyfin 10.11 or newer reports free space. And what that says about the server's own settings: transcodes that never
+Jellyfin 10.11 or newer reports free space. A file that replaced another, such as an upgrade from Radarr or Sonarr,
+counts only by what it is bigger. And what that says about the server's own settings: transcodes that never
 use hardware while transcoding is common, or a library scan that runs a quarter of the time. FinStats never says how many
 streams your server could take: it cannot know, so it shows what it has seen.
 

@@ -1878,8 +1878,10 @@ from the first stream starting to the last one ending; an evening of episodes ba
 
 A disk is the library folders on the device Jellyfin names (the mount, or the drive on Windows), at the lowest free space
 read for them, since Jellyfin reads folder by folder; without a device, the folders that report the same free space. It
-fills by the files under its folders (`/` or `\`) that Jellyfin added in its window (by their date added, so a replaced
-file counts as new), and `months_left` is its free space at that pace. The window is `window_months` (six), or shorter on
+fills by the files under its folders (`/` or `\`) that Jellyfin added in its window (by their date added), and
+`months_left` is its free space at that pace. A file that took the place of one the library no longer has (the same film,
+episode or track in the same library: an upgrade from Radarr or Sonarr, or a file Jellyfin gave a new id) adds only the
+difference, a smaller one nothing, unless the one it replaced left more than 30 days apart from its arrival. The window is `window_months` (six), or shorter on
 a disk filled more recently: a disk's first month is its filling, not its growth, so the pace is measured from a month after
 its first file, and a disk without a month of growth since then is `young`, with no pace (`added_per_month` 0).
 
