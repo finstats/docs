@@ -241,9 +241,10 @@ A picture FinStats knows the Jellyfin image tag of is cached under that tag and 
 `Cache-Control: private, no-cache`: the browser asks again every time and gets `304` while the picture is the same.
 A poster replaced in Jellyfin has a new tag, and so is fetched and sent again. The tags are read by the library read
 and, in between, by the task `sync_changes` (Metadata changes, below).
-Without a known tag (a person's portrait, say) a picture is cached as before: `private, max-age=604800`, no `ETag`.
+A person's portrait is known by the tag the people read noted (`sync_changes`). Without a known tag a picture is cached
+for a week instead: `private, max-age=604800`, no `ETag`.
 
-Both send long-lived `Cache-Control`. Use as `<img loading="lazy">` with an `onerror` fallback.
+Use as `<img loading="lazy">` with an `onerror` fallback.
 
 ## Admin 🔒
 
@@ -1475,7 +1476,7 @@ Two scopes. `full` opens everything its holder may see. `calendar` opens `GET /a
 | Method | Path | Body | Response |
 |---|---|---|---|
 | GET | `/api/keys` | – | `{keys: [{id, name, scope, user_id, user_name, has_image, created_at, expires_at, last_used_at, last_used_ip, mine}]}`: the caller's live keys; a Jellyfin administrator's list holds everyone's. Never the key itself. |
-| POST | `/api/keys` | `{name (1–60), scope: "full"\|"calendar", expires_in_d?: 1..3650}` | `201 {id, key, name, scope, created_at, expires_at}`, the only time `key` is ever answered. At most 20 live keys per person (`409`). |
+| POST | `/api/keys` | `{name (1–60), scope: "full"\|"calendar", expires_in_d?: 1..3650}` | `201 {id, key, name, scope, created_at, expires_at}`, the only time `key` is ever answered. At most 20 live keys per person (`400`). |
 | DELETE | `/api/keys/{id}` | – | `{ok: true}`; the key is gone and stops on its next request (the audit log keeps the record). Own keys, or anyone's for an administrator; `404` otherwise, and for a key already revoked. |
 
 Both writes need a **session**: a request authenticated by a key cannot mint or revoke keys (`403`), so a leaked key
