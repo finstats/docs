@@ -105,7 +105,8 @@ re-attaches the old plays to the new entry, when it can tell which one that is w
 only on the same album by the same artist, since half the albums there are have an "Intro".
 
 ## Who watches together
-When two or more people press play on the same thing at the same time, FinStats notices: which
+When two or more people press play on the same thing at the same time, or finish it together at the same place (SyncPlay
+with somebody who joined late), FinStats notices: which
 groups watch together, what they watch, and how many hours they have spent doing it. It shows on
 the dashboard, on each profile ("most often with"), and as a small mark on every shared play. The
 **Together** page has the whole of it: who watches with whom, hours in company against hours alone
