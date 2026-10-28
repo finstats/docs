@@ -23,7 +23,9 @@ click **Download Backup**.
    the same). Leave the `config.backup-…` files: they are Tautulli's settings, not its history.
 4. Copy it to the computer you are using, with `scp`, a shared folder or your NAS's file manager.
 
-In FinStats, open **Settings → Import**, find the card for the one you used, and drop the file in.
+In FinStats, open **Settings → Import**, find the card for the one you used, and drop the file in. Importing needs
+*manage FinStats* and *see everyone's activity*, since an import writes other people's plays; Jellyfin administrators
+have both. A file may be up to 4 GB.
 
 <img src="../../assets/screenshots/tautulli.png" alt="Tautulli import: a wiring board with Plex users on the left and Jellyfin users on the right, coloured wires from five Plex users to four people (two Plex accounts into one), and three Plex users left unwired, so their history stays behind" width="100%">
 
@@ -38,7 +40,8 @@ with its likeliest match already found, one **Locate** away.
 has, whichever tracker brought it in and whether or not it watched that evening itself.
 
 Large backups are no problem (a 350 MB file imports in a few seconds), and importing the same file
-twice is safe. One thing to know: neither tracker recorded what happens *during* a play, so imported
+twice is safe. A play dated before 1990 or after tomorrow, or that ends before it starts, is a broken row and is left
+out. One thing to know: neither tracker recorded what happens *during* a play, so imported
 history has no pause-and-skip timelines. Everything FinStats records from now on does.
 [How Jellystat data is interpreted →](jellystat.md) ·
 [How Streamystats data is interpreted →](streamystats.md) ·

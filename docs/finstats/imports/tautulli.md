@@ -63,7 +63,13 @@ track it is.
 
 Tautulli's `users` table carries every Plex user's access tokens and e-mail address. FinStats never
 reads those columns: the board shows names and play counts only. The uploaded file is removed once
-you import or start over, at the next start, and after six hours of waiting for its wires.
+you import or start over, at the next start, and after six hours of waiting for its wires; one cut off half way never
+stays.
+
+FinStats reads somebody else's database, so it reads it with care: opened read-only and leaving nothing beside it, only
+from plain tables, and a zip unpacked no further than the size it claims. A backup with views, virtual tables,
+generated or hidden columns, or ids that repeat is refused rather than read, since a genuine Tautulli backup has none of
+them. One upload arrives at a time.
 
 ## What imported history cannot have
 
