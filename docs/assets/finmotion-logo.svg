@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FinMotion">
+  <title>FinMotion</title>
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#33291d"/>
+      <stop offset="1" stop-color="#1a1510"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="17" y1="13" x2="54" y2="51" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffd89a"/>
+      <stop offset="1" stop-color="#e8891c"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#tile)"/>
+  <!-- The play triangle with the frames it just left behind it. -->
+  <g fill="url(#mark)" stroke="url(#mark)" stroke-width="3" stroke-linejoin="round">
+    <g opacity="0.2"><path d="M10 17 34 32 10 47Z"/></g>
+    <g opacity="0.45"><path d="M18 17 42 32 18 47Z"/></g>
+    <g opacity="1"><path d="M26 17 50 32 26 47Z"/></g>
+  </g>
+</svg>

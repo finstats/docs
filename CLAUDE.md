@@ -61,7 +61,7 @@ docs/assets/        screenshots/, logo.svg, fonts/ (Inter and JetBrains Mono, OF
 ## Logos
 
 The logos' masters, their PNGs and the brand guidelines live in the branding repository (`../FinBranding`).
-This repository keeps byte-identical copies of the three SVGs it serves, `docs/assets/logo.svg`, `mark-light.svg` and `mark-dark.svg`: the rounded tile for the README and the favicon, the bare marks for the header. A logo changes
+This repository keeps byte-identical copies of the SVGs it serves, `docs/assets/logo.svg`, `mark-light.svg` and `mark-dark.svg`: the rounded tile for the README and the favicon, the bare marks for the header; and each project's own tile (`finstats-logo.svg`, `finui-logo.svg`, `finmotion-logo.svg`) at the top of its section. A logo changes
 there first and is copied here in the same sitting; no other logo file (a `logo/` folder of PNGs) belongs here.
 
 ## No em-dashes

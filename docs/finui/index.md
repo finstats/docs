@@ -1,5 +1,7 @@
 # FinUI
 
+<p align="center"><img src="../assets/finui-logo.svg" width="88" height="88" alt=""></p>
+
 The components [FinStats](https://github.com/finstats/finstats) is built from, sixty-eight of them: buttons, fields,
 checkboxes, sliders, date pickers and code inputs; cards, tables that sort by meaning, tabs, steps and timelines; dialogs
 that stack, drawers, popovers, menus and toasts; and charts (bars, lines, donuts, heatmaps) that read only tokens.

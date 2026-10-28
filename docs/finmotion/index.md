@@ -1,5 +1,7 @@
 # FinMotion
 
+<p align="center"><img src="../assets/finmotion-logo.svg" width="88" height="88" alt=""></p>
+
 How [FinUI](../finui/index.md) moves. FinUI is the components: still, plain, complete on their own;
 FinMotion is an extra you put on top: one stylesheet and one call, and every FinUI component on the page moves. Vanilla ES
 modules and plain CSS, no build step and no dependencies, like FinUI.

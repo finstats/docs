@@ -1,6 +1,6 @@
 # FinStats
 
-<p align="center"><img src="../assets/logo.svg" width="88" height="88" alt=""></p>
+<p align="center"><img src="../assets/finstats-logo.svg" width="88" height="88" alt=""></p>
 
 **See what your Jellyfin server is really doing.** Who is watching, what they watch, how it streams, and your year in
 review. One tiny container. No database server. Set up in two minutes.
