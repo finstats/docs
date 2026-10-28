@@ -131,7 +131,8 @@ docker run -d --name finstats-dev --network finstats-dev -p 8089:8080 \
 
 1. Open <http://localhost:8097> and click through Jellyfin's own first-run wizard: create an administrator,
    add `/media` as a library.
-2. Open <http://localhost:8089>. In FinStats' setup the Jellyfin address is **`http://jellyfin-dev:8096`**:
+2. Open <http://localhost:8089>. The setup code is at the end of the start-up line in `docker logs finstats-dev`.
+   In FinStats' setup the Jellyfin address is **`http://jellyfin-dev:8096`**:
    the container's name and Jellyfin's *internal* port, not `localhost` and not 8097. Inside a container,
    `localhost` is the container itself; this is the most common way to get "Could not connect".
 3. Play something in the Jellyfin web client. It appears on the FinStats dashboard within five seconds.
