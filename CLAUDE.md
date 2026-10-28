@@ -32,6 +32,7 @@ docs/finstats/      finstats: install, features, privacy, imports/ (index and on
 docs/finui/         FinUI: index, create, using, icons, blocks
 docs/finmotion/     FinMotion: index, install, springs, layout
 docs/assets/        screenshots/, logo.svg, fonts/ (Inter and JetBrains Mono, OFL, licences beside them), extra.css
+docs/javascripts/   sheet-drag.js: on a phone, a drag closes the menu sheet and a tap on the bar opens the menu
 ```
 
 ## The rules
@@ -56,7 +57,11 @@ docs/assets/        screenshots/, logo.svg, fonts/ (Inter and JetBrains Mono, OF
   from its demo data; look at them before committing.
 - **Nothing from another host.** The theme is `font: false` and the fonts are bundled, as FinStats bundles its own; the
   site may link out but loads nothing from elsewhere.
-- The colours in `assets/extra.css` are FinUI's (`tokens.css`): washi paper by day, Obsidian by night.
+- The colours in `assets/extra.css` are FinUI's (`tokens.css`): washi paper by day, Obsidian by night. The layout is the
+  PyDeck docs' (the owner's decision, 2026-10-28): a hero front page with cards, rounded panels, and on a phone the bar
+  at the bottom with the menu and search rising from it as sheets. The cards' icons are Material's SVGs written into
+  the page (`pymdownx.emoji`); use only `:material-…:` and `:octicons-…:` there, since a real emoji would load Twemoji
+  from a CDN.
 
 ## Logos
 

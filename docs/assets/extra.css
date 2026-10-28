@@ -1,6 +1,7 @@
-/* FinStats' own look on Material: washi paper by day (cream ground, ink text, a vermilion seal for the accent) and
-   Obsidian by night, the colours of FinUI's tokens.css. The fonts are bundled beside this file, so the site asks no
-   other host for anything. */
+/* FinStats' own colours on Material: washi paper by day (cream ground, ink text, a vermilion seal for the accent) and
+   Obsidian by night, the colours of FinUI's tokens.css, laid out the way the PyDeck docs are: a hero front page, cards,
+   rounded panels, and on a phone a bar at the bottom with sheets that rise from it. The fonts are bundled beside this
+   file, so the site asks no other host for anything. */
 
 @font-face {
   font-family: "Inter";
@@ -71,14 +72,161 @@
   --md-footer-bg-color--dark: #121212;
 }
 
-.md-header, .md-tabs { border-bottom: 1px solid var(--md-default-fg-color--lightest); box-shadow: none; }
-.md-typeset img { border-radius: 8px; }
-.md-typeset table:not([class]) { font-size: .72rem; }
-[data-md-color-scheme="default"] .md-search__input { background-color: rgba(0, 0, 0, .07); }
-[data-md-color-scheme="default"] .md-search__input:hover { background-color: rgba(0, 0, 0, .11); }
+/* What the layout below reads besides Material's own: the accent as a wash, and the ground panels sit on. */
+[data-md-color-scheme="default"] {
+  --md-accent-fg-color--transparent: rgba(154, 47, 29, .12);
+  --md-code-hl-color: rgba(154, 47, 29, .12);
+  --md-typeset-mark-color: rgba(154, 47, 29, .18);
+  --fs-panel: #e7e0ce;
+  --fs-line: rgba(0, 0, 0, .1);
+  --fs-field: rgba(0, 0, 0, .07);
+  --fs-sheet-shadow: 0 -.3rem .8rem rgba(0, 0, 0, .15);
+}
+[data-md-color-scheme="slate"] {
+  --md-accent-fg-color--transparent: rgba(166, 138, 249, .15);
+  --md-code-hl-color: rgba(166, 138, 249, .15);
+  --md-typeset-mark-color: rgba(166, 138, 249, .25);
+  --fs-panel: #181818;
+  --fs-line: rgba(255, 255, 255, .06);
+  --fs-field: #262626;
+  --fs-sheet-shadow: 0 -.3rem .8rem rgba(0, 0, 0, .4);
+}
+
+.md-header, .md-tabs { background-color: var(--fs-panel); border-bottom: 1px solid var(--fs-line); box-shadow: none; }
+.md-tabs__link--active, .md-tabs__link:hover { opacity: 1; }
+.md-nav__link--active, .md-nav__link:is(:focus, :hover) { color: var(--md-accent-fg-color); }
+.md-footer-meta { display: none; }
 
 /* The mark in the header and the mobile drawer, without its tile: one file per scheme, the other hidden.
    Material shows the drawer's logo with `.md-nav__title .md-nav__button.md-logo img`, so this must outweigh that,
    or both marks show there, stacked over the site's name. */
 [data-md-color-scheme="default"] .md-logo img.logo-mark.logo-mark--dark,
 [data-md-color-scheme="slate"] .md-logo img.logo-mark.logo-mark--light { display: none; }
+
+/* Search: a rounded field, its results a box hanging from it. */
+.md-search__form { background-color: var(--fs-field); border: 1px solid var(--fs-line); border-radius: 10px; }
+.md-search__form:hover { background-color: var(--fs-field); }
+.md-search__form:focus-within { border-color: var(--md-accent-fg-color); }
+.md-search__output { background-color: var(--fs-panel); border: 1px solid var(--fs-line); border-radius: 10px; }
+@media screen and (min-width: 76.25em) {
+  .md-search__output { border-top-left-radius: 0; border-top-right-radius: 0; }
+}
+
+/* Panels: code, notes and tables, softly rounded on the panel ground. */
+.md-typeset code { border-radius: 6px; overflow-wrap: anywhere; }
+.md-typeset pre > code { border-radius: 10px; }
+.md-typeset .admonition, .md-typeset details {
+  background-color: var(--fs-panel); border: 1px solid var(--fs-line); border-radius: 10px; box-shadow: none;
+}
+.md-typeset .md-typeset__table table:not([class]) { border: 1px solid var(--fs-line); border-radius: 10px; font-size: .72rem; }
+.md-typeset .md-typeset__table th { background-color: var(--fs-panel); }
+.md-typeset .md-typeset__table td { border-top: 1px solid var(--fs-line); }
+.md-typeset img { border-radius: 8px; }
+
+/* Buttons: the accent filled for the first, an outline for the rest. */
+.md-typeset .md-button {
+  color: var(--md-default-fg-color); border-color: var(--md-default-fg-color--lighter); border-radius: 10px;
+}
+.md-typeset .md-button:is(:hover, :focus) {
+  color: var(--md-accent-fg-color); border-color: var(--md-accent-fg-color);
+  background-color: var(--md-accent-fg-color--transparent);
+}
+.md-typeset .md-button--primary,
+.md-typeset .md-button--primary:is(:hover, :focus) {
+  background-color: var(--md-accent-fg-color); border-color: var(--md-accent-fg-color); color: var(--md-default-bg-color);
+}
+.md-typeset .md-button--primary:is(:hover, :focus) { filter: brightness(1.1); }
+
+/* The front page: a hero (name, a line, two buttons, the dashboard), then cards. */
+.fs-hero { text-align: center; padding: 2.5rem 1rem 1.5rem; }
+.fs-hero h1 { font-size: 2.6rem; font-weight: 800; letter-spacing: -.02em; margin: 0 0 .4rem; color: var(--md-default-fg-color); }
+.fs-hero .headerlink { display: none; }
+.fs-hero p.fs-tagline { font-size: 1.05rem; color: var(--md-default-fg-color--light); max-width: 40rem; margin: 0 auto 1.4rem; }
+.fs-hero .md-button { margin: .2rem .3rem; }
+.md-typeset img.fs-shot {
+  display: block; margin: 2.2rem auto 0; max-width: min(100%, 46rem); width: auto; height: auto;
+  border-radius: 12px; border: 1px solid var(--fs-line); box-shadow: var(--md-shadow-z2);
+}
+.md-typeset img.fs-tile { width: 1.6rem; height: 1.6rem; vertical-align: -.45rem; margin-right: .3rem; border-radius: 6px; }
+
+/* Cards lift on hover, and the whole card is the link. */
+.md-typeset .grid.cards > ul > li { position: relative; transition: border-color 120ms ease, transform 120ms ease, box-shadow 120ms ease; }
+.md-typeset .grid.cards > ul > li:hover {
+  cursor: pointer; border-color: var(--md-accent-fg-color); transform: translateY(-2px); box-shadow: var(--md-shadow-z2);
+}
+.md-typeset .grid.cards > ul > li > :last-child a::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset .grid.cards > ul > li, .md-typeset .grid.cards > ul > li:hover { transition: none; transform: none; }
+}
+
+@media screen and (max-width: 44.9375em) {
+  .fs-hero { padding: 1.5rem .5rem 1rem; }
+  .fs-hero h1 { font-size: 1.9rem; }
+  .fs-hero p.fs-tagline { font-size: .95rem; }
+  .fs-hero .md-button { display: block; width: 100%; margin: .4rem 0; }
+}
+@media screen and (min-width: 45em) and (max-width: 59.9375em) {
+  .fs-hero h1 { font-size: 2.2rem; }
+}
+
+/* Phones and small tablets: the bar sits at the bottom, under the thumb, and the menu and search rise from it as
+   sheets (javascripts/sheet-drag.js lets a drag close the menu). Larger text, and no logo or repository in the
+   menu, which the bar already shows. */
+@media screen and (max-width: 76.1875em) {
+  .md-header { position: fixed; top: auto; bottom: 0; border-bottom: 0; border-top: 1px solid var(--fs-line); }
+  .md-container { padding-bottom: 2.4rem; }
+  .md-top { margin-top: 0; }
+  .md-header__title { cursor: pointer; }
+
+  .md-typeset { font-size: .9rem; line-height: 1.7; }
+  .md-nav { font-size: .85rem; }
+  .md-nav__title { font-size: .95rem; }
+  .md-search__input { font-size: .9rem; height: 3rem; }
+
+  .md-sidebar--primary {
+    top: auto !important; bottom: 0 !important; left: 0 !important; right: 0 !important;
+    width: 100% !important; height: 80vh !important; max-height: 80vh !important;
+    transform: translateY(100%) !important;
+    border-top-left-radius: 14px; border-top-right-radius: 14px; box-shadow: var(--fs-sheet-shadow);
+    z-index: 6; overflow: hidden;
+  }
+  [data-md-toggle="drawer"]:checked ~ .md-container .md-sidebar--primary { transform: translateY(0) !important; }
+  .md-sidebar--primary .md-sidebar__scrollwrap,
+  .md-sidebar--primary .md-sidebar__inner,
+  .md-sidebar--primary .md-nav--primary { width: 100%; }
+  .md-sidebar--primary .md-nav--primary > .md-nav__title {
+    position: relative; border-top-left-radius: 14px; border-top-right-radius: 14px; padding-top: 1rem;
+  }
+  .md-sidebar--primary .md-nav--primary > .md-nav__title::before {
+    content: ""; position: absolute; top: .4rem; left: 50%; transform: translateX(-50%);
+    width: 2.2rem; height: .22rem; border-radius: .22rem; background: var(--md-default-fg-color--lighter);
+  }
+  .md-nav--primary .md-nav__title .md-logo, .md-nav--primary > .md-nav__source { display: none; }
+
+  .md-search__inner {
+    position: fixed !important; top: auto !important; bottom: 0 !important; left: 0 !important; right: 0 !important;
+    width: 100% !important; height: 80vh !important; max-height: 80vh !important; opacity: 1 !important;
+    transform: translateY(100%) !important; transition: transform .25s cubic-bezier(.4, 0, .2, 1) !important;
+    display: flex; flex-direction: column-reverse; overflow: hidden;
+    border-top-left-radius: 14px; border-top-right-radius: 14px; box-shadow: var(--fs-sheet-shadow); z-index: 8;
+  }
+  [data-md-toggle="search"]:checked ~ .md-header .md-search__inner {
+    transform: translateY(0) !important; transition: transform .25s cubic-bezier(.1, .7, .1, 1) !important;
+  }
+  .md-search__form { height: 3rem; flex: 0 0 auto; border-radius: 0 !important; }
+  .md-search__output {
+    position: relative !important; top: auto !important; bottom: auto !important;
+    flex: 1 1 auto; min-height: 0; opacity: 1 !important; overflow: hidden; border-radius: 0 !important;
+  }
+  .md-search__scrollwrap { height: 100% !important; max-height: none !important; width: 100% !important; }
+  .md-search__icon[for="__search"], .md-search__options { top: 50%; transform: translateY(-50%); }
+  .md-search__overlay {
+    position: fixed !important; inset: 0 !important; width: 100% !important; height: 100% !important;
+    border-radius: 0 !important; transform: none !important; background-color: rgba(0, 0, 0, .55) !important;
+    opacity: 0; transition: opacity .25s !important;
+  }
+  [data-md-toggle="search"]:checked ~ .md-header .md-search__overlay { opacity: 1 !important; }
+}
+@media screen and (max-width: 76.1875em) and (prefers-reduced-motion: reduce) {
+  .md-search__inner, [data-md-toggle="search"]:checked ~ .md-header .md-search__inner { transition: none !important; }
+}
