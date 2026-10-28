@@ -45,7 +45,9 @@ An administrator can grant more under Settings → Access:
 | See everyone's activity | Other people's statistics and history, the Users page, every live stream. |
 | See network details | IP addresses, device ids, local versus remote. |
 | See the server | The Server page, the server log, failed sign-ins, file paths. |
-| Manage FinStats | Settings, tasks, the Jellystat import, deleting plays. |
+| See what is downloading | The download queue with speeds, torrent names and which client. Who asked for each download also takes *see everyone's activity*. Without it, people still see how far their own request has got. |
+| Be sent notifications | Destinations of their own, sent only what they may already see (more under Notifications, below). |
+| Manage FinStats | Settings, tasks, the Jellystat import, deleting plays: their own, and anybody's with *see everyone's activity* too. |
 
 Grants for everyone and grants for one person add up; there are no "deny" rules to reason about.
 All of it is enforced by the server on every request, not by hiding things in the interface, and
