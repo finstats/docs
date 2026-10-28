@@ -4,6 +4,16 @@
 See every stream as it happens: who, what, on which device and from where, whether it plays
 directly or transcodes, and why. A status bar keeps the essentials in sight on every page.
 
+Coming from Plex? The **Tautulli-style** layout (not affiliated with Tautulli) is a second layout, chosen per browser in Settings → Appearance: a bar across the top
+and the stats alone, home, libraries, users, history and graphs, laid out the way a classic Plex stats server is. It loads
+only its own half of FinStats, so it is also the quickest way in.
+
+FinStats speaks **24 languages**: every page, the Patch notes and what the server says, with numbers and dates written
+the way each language writes them. Each browser picks its own under Settings → Appearance → Language, or simply follows
+the browser. English and Norwegian, Synnmørsk (the maintainer's own dialect) included, are checked by the maintainer, who speaks them; the others were translated by Claude
+Opus 5.5 (high effort), an AI model, and nobody here can check them, so they may hold mistakes, and corrections from
+people who speak them are welcome.
+
 ## Answers, not just charts
 
 <img src="../assets/screenshots/playback.png" alt="Playback page: play methods, concurrent streams over time, which clients transcode, how far people get" width="100%">
@@ -24,7 +34,8 @@ directly or transcodes, and why. A status bar keeps the essentials in sight on e
 - **Is it dubbed?** Every title shows the languages of its audio and subtitle tracks. A show says how far a dub goes
   ("English: 13 of 26 episodes"), and each episode lists its own, so you know before you start.
 - **What is my library made of?** Resolutions, codecs, HDR, size per decade, what was added when,
-  and the big one: **titles nobody has ever watched**, sorted by how much space they take.
+  and the big one: **titles nobody has ever watched**, sorted by how much space they take. For every library at once,
+  or only the ones you pick.
 
 ## Is the library in order?
 **Server → Library health** compares every file with its neighbours and lists what stands out, each with the numbers
@@ -33,6 +44,16 @@ that say so: episodes missing in the middle of a season, a season in another res
 claims, a dub that covers two seasons and not the third, and titles Jellyfin never matched with a catalogue. Set aside
 what is fine on purpose, with a note; it comes back by itself if the files change. FinStats only reports: it never
 deletes, rescans or fixes anything.
+
+## Will it cope?
+**Server → Capacity** answers from what FinStats has already seen. The busiest moments on record: how many streams at
+once, how many of them transcoded, and whether Jellyfin used hardware for it (a history imported from Tautulli is
+Plex's, and is left out). How fast each disk fills with what is
+added ("films grew 41 GB a month over the last six months; at that pace about nine months of space are left"), where
+Jellyfin 10.11 or newer reports free space. A file that replaced another, such as an upgrade from Radarr or Sonarr,
+counts only by what it is bigger. And what that says about the server's own settings: transcodes that never
+use hardware while transcoding is common, or a library scan that runs a quarter of the time. FinStats never says how many
+streams your server could take: it cannot know, so it shows what it has seen.
 
 ## Is that really them?
 
@@ -57,7 +78,8 @@ they know. The **Pipeline** page then answers the questions statistics alone can
 - **Was it worth getting?** Every request with who asked, how long it took to arrive, and whether they ever watched it,
   plus the list nobody likes to see: what arrived weeks ago and has never been played.
 - **What is coming?** A calendar of new episodes and film releases, marked with who is actually watching that show, so a
-  Friday episode of something three people follow stands out from one nobody has touched in a year.
+  Friday episode of something three people follow stands out from one nobody has touched in a year. **Export .ics**
+  saves the list as you filtered it, to import into a calendar app once; a calendar key keeps one current instead.
 - **What is arriving right now?** The live queue with progress, speed and what went wrong on import, plus what came in
   over the last week, month or year, by indexer, quality and download client.
 
@@ -79,10 +101,12 @@ Every film and show lists its cast and crew, and every actor and director has a 
 what they are in on your server, and how much of it has been watched.
 
 Renamed a file? Jellyfin treats it as a new item and orphans its history. FinStats notices and
-re-attaches the old plays to the new entry.
+re-attaches the old plays to the new entry, when it can tell which one that is without guessing: a track
+only on the same album by the same artist, since half the albums there are have an "Intro".
 
 ## Who watches together
-When two or more people press play on the same thing at the same time, FinStats notices: which
+When two or more people press play on the same thing at the same time, or finish it together at the same place (SyncPlay
+with somebody who joined late), FinStats notices: which
 groups watch together, what they watch, and how many hours they have spent doing it. It shows on
 the dashboard, on each profile ("most often with"), and as a small mark on every shared play. The
 **Together** page has the whole of it: who watches with whom, hours in company against hours alone

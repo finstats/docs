@@ -8,7 +8,8 @@ A session follows the person as Jellyfin has them now, not as they were when the
 FinStats has read Jellyfin's users (every 15 minutes, or at once from Settings), an administrator
 Jellyfin demoted is no longer one here, and somebody it disabled or deleted is signed out. One person
 keeps at most 30 sessions; the oldest is signed out at the next sign-in. Attempts are rate limited to
-10 per 5 minutes per address.
+10 per 5 minutes per address. The only other cookie FinStats sets is `finstats_lang`, the language the page reads in (`nb-NO` and the like),
+so that a picture the browser fetches by itself, such as a Recap card, is drawn in it; it says nothing about who you are.
 
 **API keys.** Anyone signed in may make keys for themselves under Settings → API keys, for a script,
 a dashboard or a phone's calendar. A key is a second credential for the same person and nothing
@@ -44,7 +45,9 @@ An administrator can grant more under Settings → Access:
 | See everyone's activity | Other people's statistics and history, the Users page, every live stream. |
 | See network details | IP addresses, device ids, local versus remote. |
 | See the server | The Server page, the server log, failed sign-ins, file paths. |
-| Manage FinStats | Settings, tasks, the Jellystat import, deleting plays. |
+| See what is downloading | The download queue with speeds, torrent names and which client. Who asked for each download also takes *see everyone's activity*. Without it, people still see how far their own request has got. |
+| Be sent notifications | Destinations of their own, sent only what they may already see (more under Notifications, below). |
+| Manage FinStats | Settings, tasks, the Jellystat import, deleting plays: their own, and anybody's with *see everyone's activity* too. |
 
 Grants for everyone and grants for one person add up; there are no "deny" rules to reason about.
 All of it is enforced by the server on every request, not by hiding things in the interface, and
@@ -129,7 +132,7 @@ existed, so adding one cannot replay a year of history at you.
 - **Who may add one.** Only a Jellyfin administrator can add a destination for the server. Anybody else needs the *Be sent notifications*
   permission, their destination may only point at a public address (not something inside your network), and it is sent only what that person
   can already see in FinStats: their own requests and alerts, somebody else's plays only if they may see everyone's activity, addresses only
-  if they may see network details.
+  if they may see network details. Taking the permission away stops what their destinations are sent, at once.
 - **No redirect is followed**, for the same reason as everywhere else: a token must not travel to wherever a redirect points. The three
   services whose address is their own (Telegram, Pushover, Pushbullet) are reached at that address and no other, so a token issued by one
   of them can never be posted to a look-alike host.

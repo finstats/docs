@@ -11,6 +11,7 @@ permissions; a request carrying both is judged on the header alone.
 - **Dates** in time series are `YYYY-MM-DD` in the server's local timezone (`TZ` env).
 - **IDs** are Jellyfin IDs: 32 lowercase hex chars, no dashes.
 - **Errors**: non-2xx status with `{"error": "human readable message"}`.
+  The message is in the language `Accept-Language` asks for (see *Language* below).
   `401` = not logged in (also an expired, revoked or malformed API key), `403` = not allowed (also a
   calendar-scoped key anywhere but the feed), `409` = wrong state (e.g. already configured).
 - **Common filters** (query string) on every `/api/stats/*`, `/api/activity`, `/api/users*`,
@@ -22,6 +23,17 @@ permissions; a request carrying both is judged on the header alone.
 - **A filter that names several values** uses commas, and naming nothing means all of them,
   so `?type=` and no `type` at all are the same request. Values are de-duplicated and at most 50
   are read, so no caller can grow the SQL by repeating or padding them.
+- **Language**: whatever the server answers in words (error messages, the Patch notes, the Recap's cards, a
+  Jellyfin job's explanation, a task's result) is in the language `X-FinStats-Language` names exactly (the pages send
+  their own), else the one the `finstats_lang` cookie names (what the browser fetches by itself, a picture or a download),
+  else the first language of `Accept-Language` that FinStats speaks:
+  a tag as written, else its language: `en-GB` (an `en` that names a country other than the US), `en-US` (`en`), `nb-NO` (`nb`, `no`), `nn-NO`, `da-DK`,
+  `de-DE`, `es-ES`, `fi-FI`, `fr-FR`, `hi-IN`, `is-IS`, `it-IT`, `ja-JP`, `ko-KR`, `nl-NL`, `pl-PL`, `pt-BR` (any `pt`),
+  `ru-RU`, `sv-SE`, `tr-TR`, `uk-UA`, `zh-CN` (`zh`, `zh-Hans`, `zh-SG`) and `zh-TW` (`zh-Hant`, `zh-HK`, `zh-MO`); weights
+  are honoured, and anything else is `en-US`. A text a language does not have yet is said in `en-GB`; the Recap's and
+  the public profile's cards are drawn in `en-GB` for Japanese, Korean, Chinese and Hindi, whose letters the card font lacks. Ids, kinds and states (`"kind": "Added"`, `"state": "watched"`) never change
+  with the language. The pages send the language chosen in Settings → Appearance; the words they draw themselves come from
+  `/assets/i18n/<tag>.json`, one catalogue per language.
 - **Non-admin users** are always scoped to their own `user_id` server-side, whichever and however
   many the URL names: a user filter can narrow what somebody sees and never widen it. They also
   never see IP addresses, and get `403` on admin endpoints (marked 🔒).
@@ -56,13 +68,16 @@ Session = {
   "started_at": 1790000000, "watched_s": 498,
   "client": "Jellyfin Web", "device_name": "Firefox", "app_version": "10.11.0",
   "remote_ip": "…"|null,      // null for non-admins
+  "is_local": true|false|null, // from home (a private address, or this network's public one), as the play's row says;
+                              // null without see_network, as the address is, or without an address
+  "user_has_image": true,     // the person has a picture (/api/img/user), as when the play started
   "play_method": "DirectPlay" | "DirectStream" | "Transcode",
   "video": "HEVC 1080p HDR10"|null, "audio": "EAC3 5.1"|null, "subtitle": "eng (subrip)"|null,
   "container": "mkv"|null, "bitrate": 8500000|null,
   "transcode": null | {
     "video_codec": "h264", "audio_codec": "aac", "container": "ts",
     "is_video_direct": false, "is_audio_direct": false,
-    "hw_accel": "nvenc"|null, "reasons": ["ContainerNotSupported"], "progress": 0.42|null
+    "hw_accel": "nvenc"|"none"|null, "reasons": ["ContainerNotSupported"], "progress": 0.42|null   // "none": Jellyfin said software (2.3); null: it did not say
   }
 }
 ```
@@ -86,11 +101,16 @@ carries the Monday date and `"bucket": "week"` is set at top level (otherwise `"
 ```jsonc
 {"rows": [ {"id": "…"|null, "name": "…", "sub": "2019"|null, "plays": 12, "watch_s": 3600,
             "users": 3,               // distinct users (absent for kind=users)
-            "image_item_id": "…"|null, "last_played": 1790000000} ]}
+            "image_item_id": "…"|null, "last_played": 1790000000,
+            "has_image": true, "has_backdrop": false,      // movies/series/music: a poster, a backdrop; users: a picture
+            "item_exists": true} ]}                        // movies/series/music: false → no longer in the library, don't link
 ```
-Sorted by `watch_s` desc unless `&sort=plays`.
+Sorted by `watch_s` desc unless `&sort=plays` (plays first) or `&sort=users` (distinct viewers, then plays, then name;
+for `kind=users`, which has no viewers to count, the default order). Any other `sort` is the default order.
 
-`GET /api/stats/heatmap` → `{"plays": [[24 ints] × 7], "watch_s": [[24 ints] × 7]}`: outer index 0 = Monday, inner = hour of day (server TZ).
+`GET /api/stats/heatmap` → `{"plays": [[24 ints] × 7], "watch_s": [[24 ints] × 7], "by_type": {…}}`: outer index 0 = Monday, inner = hour of day (server TZ).
+`by_type` splits it by kind of media, `Movie`, `Episode`, `Audio` and `Other` (anything else), each
+`{"weekday": [[plays, watch_s] × 7], "hour": [[plays, watch_s] × 24]}`; the kinds add up to the grid.
 
 `GET /api/stats/playback`
 ```jsonc
@@ -106,7 +126,7 @@ Sorted by `watch_s` desc unless `&sort=plays`.
 
 ## Activity
 
-`GET /api/activity?page=1&per_page=50&q=&method=&type=&item_id=&series_id=&source=&deleted=` (+ common filters)
+`GET /api/activity?page=1&per_page=50&q=&method=&type=&item_id=&series_id=&source=&watched=&deleted=` (+ common filters)
 
 `method`, `type` and `source` each take several comma-separated values: `type=Movie,Episode` is films
 and episodes and no music. `type` also takes `Other`, which is anything that is not `Movie`,
@@ -116,6 +136,9 @@ so an unknown tracker means all of them. `sources` in the answer lists which of 
 in that order. They are scoped to whose plays they may see, and deliberately *not* narrowed by the window or
 the other filters, so a filter built from it does not appear and disappear as the days change. The UI
 offers the filter only when there is more than one to choose between.
+
+`watched=1` keeps only the plays that went far enough to count as seen: `completion` of at least 0.8, the same rule a
+profile's show progress and film list use, so a play without a runtime is never one. `total` counts the same plays.
 
 `deleted=1` lists the trash instead (2.2.0): the plays a manager deleted in the last 30 days, scoped and filtered
 exactly like the list itself (without `see_everyone`, one's own), newest deletion first, each row with `deleted_at` and
@@ -145,8 +168,8 @@ Play = {
 🔒 `PUT /api/activity/{id}` `{"deleted": true | false}` → `{"ok": true, "id": 123, "deleted": true, "deleted_at": 0|null, "purge_at": 0|null}`
 (`manage`). Moves a finished play into the trash, or back out of it; it is removed for good 30 days after it was
 deleted (`purge_at`), with its timeline. Asking for the state it is already in changes nothing and answers it (a second
-delete keeps the first `deleted_at`). `404` for no such play, a play still running, or (to restore) one that is not in
-the trash. Whoever watched with it is grouped again without it, and with it once it is back. `DELETE` answers `405`.
+delete keeps the first `deleted_at`). `404` for no such play, a play still running, (to restore) one that is not in
+the trash, or, without `see_everyone`, somebody else's play: whose plays may be moved is whose plays may be seen. Whoever watched with it is grouped again without it, and with it once it is back. `DELETE` answers `405`.
 
 ## Users
 
@@ -154,7 +177,8 @@ the trash. Whoever watched with it is grouped again without it, and with it once
 ```jsonc
 {"users": [ {"id","name","is_admin","is_disabled","removed","has_image",
              "last_login_at","last_activity_at","plays","watch_s","last_played_at",
-             "last_item_name","last_client"} ]}
+             "last_item_name","last_item_id","last_item_exists","last_client","last_device",
+             "last_ip"} ]}   // of their last play (all time, at least min_play_s long); last_ip is null without see_network; last_item_exists false → don't link
 ```
 
 `GET /api/users/{id}`
@@ -175,9 +199,14 @@ the trash. Whoever watched with it is grouped again without it, and with it once
 
 `GET /api/libraries`
 ```jsonc
-{"libraries": [ {"id","name","collection_type","removed","item_count","series_count","episode_count",
-                 "size_bytes","plays","watch_s","last_played_at"} ]}
+{"libraries": [ {"id","name","collection_type","removed","item_count",
+                 "movie_count","series_count","season_count","episode_count","artist_count","album_count","track_count",
+                 "size_bytes","plays","watch_s","last_played_at",
+                 "last_item_id","last_item_name","last_series_name"|null,"last_item_type","last_item_exists"} ]}  // what that last play was
 ```
+The counts are what the library holds now (removed items left out) and take no filter; `plays`, `watch_s`,
+`last_played_at` and the `last_item_*` of that play follow the window and whose plays the caller may see. `artist_count` is the album artists its tracks
+name: FinStats does not read Jellyfin's artist items.
 
 `GET /api/libraries/{id}` → `{"library": {…}, "top": [TopRow], "recently_added": [ItemCard], "daily": [...], "bucket": "day"}`
 
@@ -192,7 +221,7 @@ the trash. Whoever watched with it is grouped again without it, and with it once
            "container","size_bytes","bitrate","video":"HEVC 1080p"|null,"audio":null,"path":"…"|null /* 🔒 */,
            "has_image": true /* own primary image; an episode without one shows its series' poster */, "has_backdrop": true},
   "totals": {"plays","watch_s","users","last_played_at"},
-  "watchers": [{"user_id","user_name","plays","watch_s","last_played_at"}],
+  "watchers": [{"user_id","user_name","has_image","plays","watch_s","last_played_at"}],
   "seasons": [ {"id","name","season_number","episodes":[{"id","name","episode_number","runtime_s","plays","watch_s"}]} ], // Series only, else []
   "daily": [...], "bucket": "day"
 }
@@ -212,9 +241,10 @@ A picture FinStats knows the Jellyfin image tag of is cached under that tag and 
 `Cache-Control: private, no-cache`: the browser asks again every time and gets `304` while the picture is the same.
 A poster replaced in Jellyfin has a new tag, and so is fetched and sent again. The tags are read by the library read
 and, in between, by the task `sync_changes` (Metadata changes, below).
-Without a known tag (a person's portrait, say) a picture is cached as before: `private, max-age=604800`, no `ETag`.
+A person's portrait is known by the tag the people read noted (`sync_changes`). Without a known tag a picture is cached
+for a week instead: `private, max-age=604800`, no `ETag`.
 
-Both send long-lived `Cache-Control`. Use as `<img loading="lazy">` with an `onerror` fallback.
+Use as `<img loading="lazy">` with an `onerror` fallback.
 
 ## Admin 🔒
 
@@ -389,12 +419,19 @@ The collector now keeps a timeline per live play and counts interruptions.
   ```
   Oldest first. Empty for imported plays: a tracker stores one row per play and nothing of what happened during it.
 
-## `GET /api/stats/insights` (common filters)
+## `GET /api/stats/insights?parts=` (common filters)
+
+`parts` names what a page wants, comma-separated (`parts=concurrency`): only those keys are answered, and only the passes
+that work them out run, so a page that draws the peak alone does not wait for the rest. Unknown names are ignored; none
+known, or no `parts`, is every key below.
 
 ```jsonc
 {
-  "concurrency": {"peak": 4, "peak_at": 1790000000|null, "peak_transcodes": 2,
-                  "series": [{"date": "2026-01-31", "peak": 3}], "bucket": "day"|"week"},   // gap-free, same bucketing as overview.daily
+  "concurrency": {"peak": 4, "peak_at": 1790000000|null,
+                  "peak_transcodes": 2, "peak_direct_streams": 1, "peak_direct_plays": 3,   // the most of each at once, each its own maximum
+                  "series": [{"date": "2026-01-31", "peak": 3,                              // gap-free, same bucketing as overview.daily
+                              "by": {"Transcode": 1, "DirectStream": 0, "DirectPlay": 2}}],   // the most of each at once in the bucket
+                  "bucket": "day"|"week"},
   "network": [Bucket],            // names "Local" / "Remote" / "Unknown"; [] for non-admins
   "data_bytes": 1234567890,       // estimated bytes sent to clients (stream bitrate × time watched)
   "genres": [Bucket],             // by watch time; episodes count towards their series' genres; max 12 + "Other"
@@ -405,7 +442,44 @@ The collector now keeps a timeline per live play and counts interruptions.
 }
 ```
 
+## `GET /api/stats/spans?user_id=|library_id=`: a profile's four figures
+
+One person's or one library's plays and time today, over the last 7 and 30 days and ever, counted as `days=` counts them
+everywhere, in one pass, with whose or which they are: the person's row as `/api/users` gives it, or the library's as
+`/api/libraries` does. Without `see_everyone` a `user_id` is the caller's own, as everywhere.
+
+```jsonc
+{"user": {UserRow}|null, "library": {LibraryRow}|null,
+ "spans": [{"days": 1, "plays": 2, "watch_s": 5400}, {"days": 7, …}, {"days": 30, …}, {"days": 0, …}]}   // 0 = all time
+```
+
+## `GET /api/stats/split?group=&by=&sort=&limit=` (common filters): plays by one thing, split by another
+
+What Simple mode's Graphs draw. `group` is required (anything else is a 400): `client`, `user`, `source_resolution` (the
+file's), `stream_resolution` (what a video transcode sent, else the file's) are ranked rows; `day` and `month` are a
+gap-free series. `by` is `type` (the default: kinds of media) or `method` (how it played). Ranked rows are by plays, or by
+time watched with `sort=watch`; `limit` is 1 to 50 (default 10). Without `see_everyone` every row is the caller's own plays.
+
+```jsonc
+{
+  "keys": ["Movie", "Episode", "Audio", "Other"],   // by=method: ["DirectPlay", "DirectStream", "Transcode"]
+  "bucket": null,                                   // "day"|"week" for group=day (overview.daily's rule), "month" for group=month
+  "rows": [
+    {"id": "…"|null,                                // the person's id for group=user, else null
+     "name": "Jellyfin Web",                        // group=day|month: "date": "2026-01-31" | "2026-01" instead of id and name
+     "plays": 3, "watch_s": 1100,
+     "by": {"Movie": [1, 600], "Episode": [1, 300], "Audio": [1, 200], "Other": [0, 0]}}   // [plays, watch_s] per key
+  ]
+}
+```
+
+A play that never said how it played counts in its row and in no part of `by=method`. Plays without a resolution
+(music) are in no resolution row.
+
 ## `GET /api/library/insights?library_id=`: what the library is made of (no time window)
+
+`library_id` names one library or several (`a,b`); without it the answer covers every library. An id no library has
+counts nothing.
 
 ```jsonc
 {
@@ -446,9 +520,9 @@ ignored), `year`, `added` or `size`; anything else is by name.
   "fetched_at": 0|null,           // null → not fetched yet (run task sync_server)
   "info": {"server_name","version","operating_system","architecture","has_update_available","has_pending_restart",
            "transcoding_temp_path","cache_path","program_data_path","log_path","encoder_location"} | null,
-  "storage": [ {"label": "Shows" | "Program data" | "Cache" | "Transcodes" | …, "path", "free_bytes", "used_bytes", "kind": "library"|"system"} ], // [] on servers older than 10.11
+  "storage": [ {"label": "Shows" | "Program data" | "Cache" | "Transcodes" | …, "path", "free_bytes", "used_bytes", "kind": "library"|"system", "device": "sda1"|null} ], // [] on servers older than 10.11
   "plugins": [ {"name","version","status","description"} ],
-  "scheduled_tasks": [ {"name","category","state","last_result": "Completed"|"Failed"|…|null,"last_run_at": 0|null,"last_duration_s": 0|null} ],
+  "scheduled_tasks": [ {"name","key": "RefreshLibrary"|null,"category","state","last_result": "Completed"|"Failed"|…|null,"last_run_at": 0|null,"last_duration_s": 0|null,"interval_s": 3600|null} ],  // interval_s: its shortest interval trigger (2.3)
   "devices": [ {"device_id","name","app","app_version","last_user_id","last_user_name","last_seen"} ]   // newest first
 }
 ```
@@ -514,7 +588,8 @@ Default: the year whose recap is "ready": the current year during December, othe
 
 # v0.4: Patch notes
 
-`GET /api/changelog` (any signed-in user): `CHANGELOG.md`, compiled into the binary and parsed.
+`GET /api/changelog` (any signed-in user): `CHANGELOG.md`, compiled into the binary and parsed, or (2.3.0) its
+translation into the language `Accept-Language` asks for (`changelog/<tag>.md`, the same releases and groups; `kind` stays English).
 
 ```jsonc
 {
@@ -781,7 +856,8 @@ ids (absent = all); ids that are not ids and cursors that are not cursors are a 
 
 # v1.1.2: Recently added
 
-`GET /api/library/recent?limit=30` (1..60), for everyone signed in: the library is the same for all, nothing here is about plays.
+`GET /api/library/recent?limit=30&kind=` (1..60), for everyone signed in: the library is the same for all, nothing here is about plays.
+`kind` is `movies` (films), `shows` (episodes, folded as below) or `music` (albums); anything else, or none, is every kind.
 ```jsonc
 { "items": [
   {"kind": "episodes", "type": "Episode", "id": "<series id>", "name": "The Rookery", "sub": "Season 4" | "3 seasons" | "Specials" | null,
@@ -820,7 +896,8 @@ Addresses get a place (country, city, a city-centre coordinate) from a city data
 ```
 Places count plays in the window plus successful sign-ins (`AuthenticationSucceeded` in Jellyfin's activity log).
 
-`GET /api/security/alerts?status=open|resolved|all&user_id=&page=&per_page=` (default `open`, 25 per page, at most 100)
+`GET /api/security/alerts?status=open|resolved|all&user_id=&page=&per_page=` (default `open`, 25 per page, at most 100; `user_id`
+may name several people, comma-separated, as every filter does)
 ```jsonc
 { "total": 3, "open": 2, "page": 1, "per_page": 25,
   "rows": [ {"id": 1, "kind": "impossible_travel" | "new_country", "severity": "high" | "medium",
@@ -987,7 +1064,7 @@ connecting a service or a read of Seerr all refresh it at once. The prefetcher n
              "error": "One file was not imported" | null,         // Sonarr's or Radarr's words, with any login or key in an address blanked
              "poster": {"item_id": "…"} | {"service_id": 1, "media_id": 12} | null,
              "item_id": "…" | null,
-             "requested_by": {"user_id": "…" | null, "user_name": "maria"} | null} ],
+             "requested_by": {"user_id": "…" | null, "user_name": "maria"} | null} ],   // one's own wish always, anybody else's only with see everyone
   "totals": {"down_bps": 0, "downloading": 3, "queued": 1, "importing": 1, "failed": 0},
   "at": 0, "sources": 2,
   "problems": [{"service": "Radarr", "error": "…"}] }
@@ -1102,7 +1179,8 @@ nothing is recorded for it. Hosts (with ports) only: never a path, never a key.
 Where what FinStats finds is sent. A destination belongs either to the **server** (Jellyfin administrators) or to **one
 person** (anybody with `notify`), and FinStats sends nothing at all until one exists: no destination, no request.
 
-Every route here needs `notify`, which administrators always have. A person sees and may touch only their own
+Every route here needs `notify`, which administrators always have, and so does being sent anything: a person it is taken
+from is sent nothing more, checked again before every try. A person sees and may touch only their own
 destinations; an administrator sees every one. **A destination's address is never given back**: a Discord webhook URL
 carries its own token, so the answer holds the host and a hint (`shown`), and editing without a new `url` keeps the
 stored one, the way a service's API key does.
@@ -1398,8 +1476,8 @@ Two scopes. `full` opens everything its holder may see. `calendar` opens `GET /a
 | Method | Path | Body | Response |
 |---|---|---|---|
 | GET | `/api/keys` | – | `{keys: [{id, name, scope, user_id, user_name, has_image, created_at, expires_at, last_used_at, last_used_ip, mine}]}`: the caller's live keys; a Jellyfin administrator's list holds everyone's. Never the key itself. |
-| POST | `/api/keys` | `{name (1–60), scope: "full"\|"calendar", expires_in_d?: 1..3650}` | `201 {id, key, name, scope, created_at, expires_at}`, the only time `key` is ever answered. At most 20 live keys per person (`409`). |
-| DELETE | `/api/keys/{id}` | – | `{ok: true}`; a soft revoke that stops the key on its next request. Own keys, or anyone's for an administrator; `404` otherwise, and for a key already revoked. |
+| POST | `/api/keys` | `{name (1–60), scope: "full"\|"calendar", expires_in_d?: 1..3650}` | `201 {id, key, name, scope, created_at, expires_at}`, the only time `key` is ever answered. At most 20 live keys per person (`400`). |
+| DELETE | `/api/keys/{id}` | – | `{ok: true}`; the key is gone and stops on its next request (the audit log keeps the record). Own keys, or anyone's for an administrator; `404` otherwise, and for a key already revoked. |
 
 Both writes need a **session**: a request authenticated by a key cannot mint or revoke keys (`403`), so a leaked key
 has no successors. `last_used_at`/`last_used_ip` are written at most once a minute per key.
@@ -1417,7 +1495,7 @@ browser that happens to be signed in. A `calendar`-scoped key is meant for it; a
 The answer is `text/calendar; charset=utf-8`, `Cache-Control: private, no-store`, CRLF line ends, folded at 75 octets:
 
 ```
-BEGIN:VCALENDAR / VERSION:2.0 / PRODID:-//finstats//EN / CALSCALE:GREGORIAN / METHOD:PUBLISH / X-WR-CALNAME:finstats: coming up
+BEGIN:VCALENDAR / VERSION:2.0 / PRODID:-//finstats//EN / CALSCALE:GREGORIAN / METHOD:PUBLISH / X-WR-CALNAME:FinStats: coming up
 BEGIN:VEVENT
 UID:{service_id}-{episode|movie}-{external_id}-{release}@finstats     // the upcoming row's own key, stable across syncs
 DTSTAMP:…Z
@@ -1695,7 +1773,155 @@ names are `/assets/finui/create/presets.json`, FinUI's file.
 
 ## A title's page in Jellyfin, from anywhere
 
-`/api/auth/me` gains `user.jellyfin_details`: a title's page in Jellyfin is this followed by its id.
+`/api/auth/me` gains `user.jellyfin_details`: a title's page in Jellyfin is this followed by its id. It also says
+`user.public_url`, the address FinStats is reached at without a trailing slash (`null` when none is set), for links made
+in a page such as a calendar feed's: the settings that hold it are a manager's to read.
 It reads like `"https://jellyfin.example.com/web/#/details?id="` and comes from the address an administrator set for "Open in Jellyfin", else the one
 FinStats connects to; `null` before Jellyfin is set up. The context menu offers "Open in Jellyfin" on any link to a title
 with it, where the answer that drew the link had no `jellyfin_link` to give.
+
+# v2.3: The live channel
+
+One WebSocket per tab, from FinStats to its own pages, carrying what changes on its own: what is playing, what is
+downloading, and the status bar's numbers. Pages still load over HTTP; the socket only says that something a page
+already shows has changed. Every endpoint it stands in for (`/api/now-playing`, `/api/downloads`, `/api/summary`) stays
+as it is, for scripts and as the fallback.
+
+`GET /api/live` with `Upgrade: websocket`, and `?lang=` with a language tag (`?lang=nb-NO`) for the language its frames speak (a WebSocket carries no header
+of the page's own; otherwise as any request). Credentials are the session cookie, or `Authorization: Bearer fs_…` for a
+client that is not a browser; **never a key in the address** (the calendar feed's `?key=` is that feed's alone) and never
+a calendar key (`403`). An `Origin` that is not FinStats' own is refused (`403`), exactly as for a write, so a page on
+another site cannot open it with the cookie its browser would attach; behind a reverse proxy `X-Forwarded-Host` counts
+only with `FINSTATS_TRUST_PROXY`. No credential `401`, a request that is not an upgrade `426`. One person holds at most
+20 connections (a tab each): the twenty-first is let in and their oldest is closed with code `4429`, as the oldest
+session gives way to a new sign-in. A page in a browser's back/forward cache keeps its socket until the browser lets
+the page go, so a seat it holds must not stand in anybody's way. A page closed with `4429` polls, as below.
+
+Every message is a JSON text frame. The page sends:
+
+```jsonc
+{"type": "subscribe", "topics": ["now_playing", "summary"]}   // the whole state of each comes at once
+{"type": "unsubscribe", "topics": ["downloads"]}
+{"type": "visible", "visible": true}                            // the tab is on screen (or not)
+{"type": "ping"}                                                // does this connection still carry? answered pong at once
+```
+
+FinStats sends:
+
+```jsonc
+{"type": "hello", "v": 1, "topics": ["now_playing", "downloads", "summary"]}   // on opening: the topics this person may have
+{"type": "now_playing", "v": 1, "data": {"sessions": [Session]}}               // data: exactly what GET /api/now-playing answers them
+{"type": "downloads", "v": 1, "data": {…}}                                       // GET /api/downloads (needs see what is downloading)
+{"type": "summary", "v": 1, "data": {…}}                                         // GET /api/summary
+{"type": "denied", "v": 1, "topic": "downloads"}                                // not permitted, or no longer
+{"type": "pong", "v": 1}                                                         // the answer to a ping, and nothing else
+```
+
+A path that dies without closing (a laptop woken, a proxy that dropped it) closes nothing on the page's side, and on a
+quiet evening nothing is pushed: FinStats' own pages ping every 30 s while visible and when shown again, and poll as below
+when no pong comes within ten seconds. FinStats gives up a connection whose page has not read what it was sent within
+ten seconds.
+
+`v` is the version of that topic's frame. Each `data` is built by the same function as the endpoint, for the person the
+connection speaks for: their own streams only without *see everyone*, no addresses without *see the network*. A frame is
+sent when the answer changes and never twice the same:
+
+- `now_playing` when one of *their* streams begins, ends, pauses, resumes, changes item, play method, audio or subtitle
+  track or group, or seeks: somebody else's stream changing sends nothing to a person who sees only their own. A position
+  only moving on is not pushed: positions travel with each frame, and the page counts the clock. A tab that says it is
+  visible again is sent it at once, since a browser slows a hidden tab's clocks.
+- `downloads` when the queue was read again (every 5 s while somebody looks, as before).
+- `summary` when somebody begins or ends a play, when the collector's state changes, and otherwise every 30 s.
+
+A tab subscribed to `downloads` that says it is visible keeps the queue on its 5-s cadence, like `?live=1` does; a hidden
+one does not.
+
+Who the connection speaks for is read again at least every 30 s, and at once when a permission, a default permission or
+sign-in is changed, a key revoked, a session signed out, or Jellyfin's users read: what it may see narrows on the next
+frame, and a credential that no longer opens FinStats closes it with code `4401`. FinStats pings every 25 s (a proxy
+closes a socket that says nothing) and drops a connection that has answered nothing for 80 s.
+
+**Fallback.** A page that cannot open the socket, or loses it, polls the endpoints above at the same intervals as before
+(now playing and downloads every 5 s, the summary every 10 s, paused while the tab is hidden), and goes back to the socket
+when it can. Behind a reverse proxy that does not pass WebSocket upgrades on, FinStats works as it did, polling.
+
+# v2.3: Capacity
+
+## `GET /api/server/capacity` 🔒 *see server details*
+
+Will this server cope, answered from what FinStats already holds: the busiest moments on record, how fast each disk fills,
+and what that says about the server's own settings. FinStats cannot know what the machine *could* do, so nothing here
+says how many streams it can take. Worked out after a read of the server's details (every 15 minutes) and after a library
+read, never on a request; `null` before the first time.
+
+```jsonc
+{
+  "computed_at": 1767225600,
+  "busiest": [Moment],          // the busiest moment of each spell of playing, busiest first (at most 5): streams, then transcodes
+  "recent": Moment | null,      // the busiest of the last `recent_days`
+  "recent_days": 90,
+  "free_space_reported": true,  // Jellyfin 10.11 and newer report it; without it there are no disks, growth only
+  "disks": [ {"folders": ["/media/films"], "libraries": ["Films"], "free_bytes": 0, "used_bytes": 0,
+              "added_per_month": 0, "months_left": 9.4 | null,     // null: nothing was added in the window
+              "window_months": 6, "young": false} ],                // the window this disk was measured over; young: too new to say
+  "growth": [ {"library": "Films", "added_bytes": 0} ],              // over the window, by library
+  "window_months": 6,
+  "findings": [Finding]
+}
+```
+
+`Moment` = `{at, streams, transcodes, hardware, software, unsaid}`: every stream counts, whatever its length, except plays
+imported from Tautulli, which are Plex's, another server's; a transcode
+is in hardware, in software (Jellyfin said it used none) or unsaid (an older server, or an imported play). A transcode
+that kept the picture (only the sound or the container converted) makes no video and counts as direct, as on the
+Playback page's hardware chart. A spell is
+from the first stream starting to the last one ending; an evening of episodes back to back is one.
+
+A disk is the library folders on the device Jellyfin names (the mount, or the drive on Windows), at the lowest free space
+read for them, since Jellyfin reads folder by folder; without a device, the folders that report the same free space. It
+fills by the files under its folders (`/` or `\`) that Jellyfin added in its window (by their date added), and
+`months_left` is its free space at that pace. A file that took the place of one the library no longer has (the same film,
+episode or track in the same library: an upgrade from Radarr or Sonarr, or a file Jellyfin gave a new id) adds only the
+difference, a smaller one nothing, unless the one it replaced left more than 30 days apart from its arrival. The window is `window_months` (six), or shorter on
+a disk filled more recently: a disk's first month is its filling, not its growth, so the pace is measured from a month after
+its first file, and a disk without a month of growth since then is `young`, with no pace (`added_per_month` 0).
+
+`Finding` = `{key, kind, title, evidence, found_at, dismissed, note, dismissed_at, dismissed_by}`:
+
+| `kind` | `evidence` |
+|---|---|
+| `software_transcodes` | `{days, plays, transcodes, software, hardware, unsaid, most_at_once}`: in the last 90 days, at least 20 transcodes Jellyfin said either way about, none of them in hardware, and transcodes a quarter of plays or more. |
+| `scan_busy` | `{interval_s, last_duration_s, duty_pct, items}`: Jellyfin's library scan, by its own last run against its shortest interval, runs a quarter of the time or more. |
+| `runway` | `{folders, libraries, free_bytes, added_per_month, months_left, window_months}`: a disk with under six months of space at that pace (over its own window); said again under three and under one. |
+
+Findings are dismissed and brought back with Library health's `POST /api/library/health/dismiss` and `…/undismiss`
+(*manage FinStats* and *see server details*, audited as `finding_dismissed` / `finding_undismissed`). A dismissal holds
+while the situation does: a new scan interval, or a disk passing three months or one, is looked at again.
+
+# v2.3: Export .ics on Upcoming
+
+`GET /api/upcoming.ics?days=&mine=&user_id=` → `text/calendar; charset=utf-8`, `Content-Disposition: attachment;
+filename="finstats-upcoming.ics"`: what Pipeline → Upcoming shows, as a file to import into a calendar app once. It does
+not update itself; `GET /api/calendar.ics` with a calendar key is the calendar that stays current.
+
+Anyone signed in, by the session cookie or a full key; a calendar key is refused (`403`) here as on every route but the
+feed, and the feed still never takes the cookie. Upcoming's own query: `days` 1–90 (default 14, clamped), `mine=true` for
+only the shows the person follows, `user_id` for somebody else's agenda, honoured only with *see everyone* (without it,
+always the caller's own). The events are the feed's, built by the same code (`entries_for`, then one `VEVENT` each), so
+for the same person and filters the two carry the same events, and it names nobody. Somebody else's agenda says no "You
+watch this": the file goes into the calendar of whoever exported it. A read: not audited, and nothing is
+asked of Sonarr, Radarr or Seerr.
+
+# v2.3: The make-up of several libraries
+
+`GET /api/library/insights` takes `library_id=a,b`: the make-up of those libraries together. One id answers as before,
+and none is every library. The Libraries page and each library's own page pick them in the section's heading.
+
+# v2.3: The welcome
+
+The welcome is asked once a person, whichever browser they first sign in on; what it asks (the language, the formats, the
+colours, the layout) stays each browser's own choice.
+
+`GET /api/auth/me` → `user.welcomed`: whether this person has been through it, on any browser. `PUT /api/me/welcomed`
+(no body) → `{"welcomed": true}`: the caller has been, and nobody else; doing it again changes nothing. Anyone signed in;
+recorded once in the audit log as `welcomed`. It travels in a backup, and a restore keeps one this install already has.

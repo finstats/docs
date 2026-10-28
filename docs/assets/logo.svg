@@ -1,20 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FinStats">
-  <title>FinStats</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FinStats docs">
+  <title>FinStats docs</title>
   <defs>
     <linearGradient id="tile" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#2a2536"/>
-      <stop offset="1" stop-color="#17151d"/>
+      <stop offset="0" stop-color="#212838"/>
+      <stop offset="1" stop-color="#13161e"/>
     </linearGradient>
     <linearGradient id="mark" x1="17" y1="13" x2="54" y2="51" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#c3b1ff"/>
-      <stop offset="1" stop-color="#7d4ff2"/>
+      <stop offset="0" stop-color="#b4cdff"/>
+      <stop offset="1" stop-color="#4a7cf0"/>
     </linearGradient>
   </defs>
   <rect width="64" height="64" rx="15" fill="url(#tile)"/>
-  <!-- A play triangle, sliced into three chart bars. -->
-  <g fill="url(#mark)" stroke="url(#mark)" stroke-width="3" stroke-linejoin="round">
-    <path d="M18.5 14.5 27.5 19.13V44.87L18.5 49.5Z"/>
-    <path d="M34 22.48 42.5 26.85V37.15L34 41.52Z"/>
-    <path d="M49 30.19 52.5 32 49 33.81Z"/>
+  <!-- The play triangle as lines of a page. -->
+  <g fill="url(#mark)">
+    <rect x="17" y="13.8" width="4" height="3.4" rx="1.7"/>
+    <rect x="17" y="19.3" width="12.01" height="3.4" rx="1.7"/>
+    <rect x="17" y="24.8" width="24.81" height="3.4" rx="1.7"/>
+    <rect x="17" y="30.3" width="35.5" height="3.4" rx="1.7"/>
+    <rect x="17" y="35.8" width="22.33" height="3.4" rx="1.7"/>
+    <rect x="17" y="41.3" width="14.13" height="3.4" rx="1.7"/>
+    <rect x="17" y="46.8" width="4" height="3.4" rx="1.7"/>
   </g>
 </svg>

@@ -20,6 +20,17 @@ FinStats can fix the folder itself, or run `sudo chown -R 1000:1000 ./data`.
 Yes. Forward to port 8080 and set `FINSTATS_TRUST_PROXY=1`. Sign-in cookies are marked secure
 automatically when the proxy reports HTTPS.
 
+Pages keep themselves current over a WebSocket (`/api/live`), so let the proxy pass upgrades on. Caddy and Traefik do
+it by themselves; nginx needs three lines in the `location`:
+
+```nginx
+proxy_http_version 1.1;
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection "upgrade";
+```
+
+Without them FinStats still works: its pages ask every few seconds instead, as they did before 2.3.
+
 ## How do I start over?
 Stop the container, delete the `data` folder, start it again. To clean up fully, also remove the
 `finstats` API key in Jellyfin (Dashboard → API Keys).

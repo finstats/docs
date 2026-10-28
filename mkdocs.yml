@@ -10,7 +10,9 @@ theme:
   name: material
   # Nothing is loaded from another host: the fonts are bundled (assets/fonts), as FinStats bundles its own.
   font: false
-  logo: assets/logo.svg
+  # The header draws the bare mark (overrides/partials/logo.html); the favicon keeps the rounded tile.
+  custom_dir: overrides
+  logo: assets/mark-light.svg
   favicon: assets/logo.svg
   palette:
     - media: "(prefers-color-scheme: light)"

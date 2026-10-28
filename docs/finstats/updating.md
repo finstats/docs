@@ -16,6 +16,10 @@ Updates only go forward. The database remembers the newest version that has open
 refuses to start on it rather than risk your history; the message says how to get going again. To really go back to
 an older version, start it on an empty data folder and restore one of the backups (`finstats restore <file>`).
 
+Before a newer version changes anything in your database, it copies the whole of it to `data/pre-update-backups/`
+(the newest three are kept). If an update goes wrong, stop FinStats, put that copy in place of `data/finstats.db` and
+start the version you came from. An update that fails and is restarted over and over keeps the copy from before it.
+
 ## Moving FinStats to another machine
 
 Download a backup under **Settings → Backups**, set up the new FinStats, and restore the file on its
