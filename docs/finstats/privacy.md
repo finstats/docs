@@ -4,11 +4,14 @@ FinStats holds who watched what, when and from where. This is what it does with 
 
 - **Sign in with your Jellyfin account.** No new passwords, and FinStats never stores yours.
 - **Nothing is readable without an account** unless an administrator allows public profiles and a person
-  publishes one, and then only what that person switched on, a day late, never a device, address or path.
+  publishes one, and then only what that person switched on, a day late and changing once a day, never a device,
+  address or path.
 - **You decide who sees what.** Let family and friends sign in if you like. By default they get
   their own statistics and recap and nothing else. From there you grant more, per person or for
   everyone: other people's activity, network details like IP addresses, the server pages, or
   managing FinStats itself. No permission opens other people's recaps or watchlists.
+- **The library is what Jellyfin shows them.** Each person sees the libraries and titles their Jellyfin account
+  may see, parental rating limits and tags included, and nothing Jellyfin keeps from them, in FinStats either.
 - **Nothing about you leaves your network.** No telemetry, no accounts, no fonts or scripts loaded
   from the internet. Posters are fetched from your own Jellyfin. The one outside request FinStats
   makes by default is a plain "what is my IP" lookup, asked **once**, so that people watching at home
@@ -17,7 +20,9 @@ FinStats holds who watched what, when and from where. This is what it does with 
   **Settings → System → Outbound connections** lists every destination FinStats can reach and whether it is
   switched on, so the promise is one you can check rather than one you have to take. The Security map needs a geolocation database; downloading it is
   off until you ask for it, and addresses are always looked up on your own machine. Sonarr, Radarr, Seerr and torrent
-  are reached at the addresses you enter, on your own network.
+  are reached at the addresses you enter, on your own network. Of Jellyfin, FinStats asks one thing about a particular
+  person: for somebody whose account Jellyfin limits by rating or tags, which titles Jellyfin lists for them (ids only),
+  so that FinStats shows them no more than Jellyfin does.
 - **Notifications go where you send them, and nowhere else.** FinStats can tell you when something happens
   (in a Discord or Slack channel, a Telegram chat, an e-mail, Pushover, Pushbullet, ntfy, Gotify, or a webhook of
   your own), and until you add a destination it sends nothing at all. Each destination is told only the kinds of event you tick for it, and IP addresses and coordinates stay
