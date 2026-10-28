@@ -1,9 +1,10 @@
 site_name: FinStats docs
 site_url: https://finstats.no/
 site_description: Documentation for FinStats, the playback-statistics server for Jellyfin, and for FinUI and FinMotion.
-repo_url: https://github.com/finstats/docs
-repo_name: finstats/docs
-edit_uri: edit/main/docs/
+# The corner links FinStats itself; the pages' own source stays this repository.
+repo_url: https://github.com/finstats/finstats
+repo_name: finstats/finstats
+edit_uri: https://github.com/finstats/docs/edit/main/docs/
 copyright: FinStats, FinUI and FinMotion are free software under the GNU General Public License v3.0.
 
 theme:
