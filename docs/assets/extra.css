@@ -77,6 +77,8 @@
 [data-md-color-scheme="default"] .md-search__input { background-color: rgba(0, 0, 0, .07); }
 [data-md-color-scheme="default"] .md-search__input:hover { background-color: rgba(0, 0, 0, .11); }
 
-/* The mark in the header, without its tile: one file per scheme, the other hidden. */
-[data-md-color-scheme="default"] .md-logo .logo-mark--dark,
-[data-md-color-scheme="slate"] .md-logo .logo-mark--light { display: none; }
+/* The mark in the header and the mobile drawer, without its tile: one file per scheme, the other hidden.
+   Material shows the drawer's logo with `.md-nav__title .md-nav__button.md-logo img`, so this must outweigh that,
+   or both marks show there, stacked over the site's name. */
+[data-md-color-scheme="default"] .md-logo img.logo-mark.logo-mark--dark,
+[data-md-color-scheme="slate"] .md-logo img.logo-mark.logo-mark--light { display: none; }
