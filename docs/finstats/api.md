@@ -881,7 +881,9 @@ most 50; anything else is a `400`). The response also carries, read-only:
 
 All of the following are for **Jellyfin administrators** (`403` otherwise): a backup is everyone's history, and a restore
 can bring permissions back. Backup exports try another UTC filename when a completed file or a fresh partial file
-occupies the name, without replacing either. Fresh partial files are protected for 15 minutes.
+occupies the name, without replacing either. Fresh partial files are protected for 15 minutes. Placement requires filesystem hard-link support; without it the
+export fails safely. Undo-delete also uses atomic no-replace placement: a concurrently created destination is
+preserved, the trash source remains, and the request returns 409.
 `{name}` must look exactly like `finstats-backup-YYYYMMDD-HHMMSS.jsonl.gz` (the time in UTC
 since 2.3.1; a backup is never written over an existing file); anything else is a `404`. A manager may write one with
 `POST /api/tasks/backup/run`; those are kept apart, `backup_keep` of them, and never push an administrator's out.
