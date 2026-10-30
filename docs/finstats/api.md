@@ -75,7 +75,8 @@ may not use FinStats is answered `401` like a wrong password, without asking Jel
 have; `403` (no access) is then answered only before the first users read. A user Jellyfin made since the last users
 read is such a name until the next one. Somebody whose Jellyfin policy has remote access off is `403` from an address
 that is not the home network's. The limit is 10 attempts per address (an IPv6 /64 is one) and 50 per IPv6 /48 in five
-minutes, and past 60 failures a minute on the whole server every attempt is `429` until the minute is out; a limiter that
+minutes, and past 60 failures a minute on the whole server every attempt is `429` until the minute is out (only attempts put to
+Jellyfin count, those waiting on its answer included); a limiter that
 is full refuses a new address rather than forget an old one, and a sign-in that works does not clear the count. Behind
 a reverse proxy the address is the last `X-Forwarded-For` entry that is not one of the proxies `FINSTATS_TRUST_PROXY`
 names, and the header is believed only from those.

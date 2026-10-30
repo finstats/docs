@@ -21,7 +21,9 @@ Jellyfin would have answered: such names cannot lock a Jellyfin account through 
 FinStats trying them. Somebody Jellyfin keeps to the home network (*Allow remote connections to this server* off) signs
 in to FinStats only from the home network too, because Jellyfin itself sees only FinStats' address. Attempts are rate
 limited to 10 per 5 minutes per address (an IPv6 /64 counts as one address) and 50 per IPv6 /48, and after 60 failures
-in a minute on the whole server nothing more is put to Jellyfin until the minute is out. A sign-in that works does not
+in a minute on the whole server nothing more is put to Jellyfin until the minute is out. Only attempts put to Jellyfin
+count there, those still waiting on its answer included; a name FinStats turns down itself costs Jellyfin nothing and
+does not count. A sign-in that works does not
 forgive the guesses before it. Behind a reverse proxy, the address is the one the proxy saw, and only from the proxies
 `FINSTATS_TRUST_PROXY` names. The only other cookie FinStats sets is `finstats_lang`, the language the page reads in (`nb-NO` and the like),
 so that a picture the browser fetches by itself, such as a Recap card, is drawn in it; it says nothing about who you are.
