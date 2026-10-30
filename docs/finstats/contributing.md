@@ -114,7 +114,7 @@ touches a production container or its data. Compose is not needed.
 docker network create finstats-dev
 
 # 2. a throwaway Jellyfin (two or three short media files are plenty)
-docker run -d --name jellyfin-dev --network finstats-dev -p 8097:8096 \
+docker run -d --name jellyfin-dev --network finstats-dev -p 127.0.0.1:8097:8096 \
   -v jellyfin-dev-config:/config -v jellyfin-dev-cache:/cache \
   -v /path/to/a/few/media/files:/media:ro \
   jellyfin/jellyfin
@@ -123,7 +123,7 @@ docker run -d --name jellyfin-dev --network finstats-dev -p 8097:8096 \
 docker build -t finstats:dev .
 
 # 4. run it: another port, another data folder, debug logging
-docker run -d --name finstats-dev --network finstats-dev -p 8089:8080 \
+docker run -d --name finstats-dev --network finstats-dev -p 127.0.0.1:8089:8080 \
   -e TZ=Europe/London -e RUST_LOG=finstats=debug \
   -v "$PWD/data-dev:/data" \
   finstats:dev
