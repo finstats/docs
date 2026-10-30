@@ -880,7 +880,9 @@ most 50; anything else is a `400`). The response also carries, read-only:
 `"idle_interval_s": 5` (while nothing does), both 1..60. New: `"backup_every_d": 7` (0 = off, 0..365) and `"backup_keep": 5` (1..100).
 
 All of the following are for **Jellyfin administrators** (`403` otherwise): a backup is everyone's history, and a restore
-can bring permissions back. `{name}` must look exactly like `finstats-backup-YYYYMMDD-HHMMSS.jsonl.gz` (the time in UTC
+can bring permissions back. Backup exports try another UTC filename when a completed file or a fresh partial file
+occupies the name, without replacing either. Fresh partial files are protected for 15 minutes.
+`{name}` must look exactly like `finstats-backup-YYYYMMDD-HHMMSS.jsonl.gz` (the time in UTC
 since 2.3.1; a backup is never written over an existing file); anything else is a `404`. A manager may write one with
 `POST /api/tasks/backup/run`; those are kept apart, `backup_keep` of them, and never push an administrator's out.
 
