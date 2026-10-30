@@ -900,7 +900,8 @@ file, and restoring it again completes it.
 history alone is merged, and home addresses, muted alerts (they return unmuted) and located titles the library lacks stay
 out, while audit rows are marked as restored. With it, the settings never open FinStats wider than it is:
 `allow_user_login`, the default permissions and `public_profiles` become what both this install and the backup allow,
-`public_url` and `jellyfin_public_url` stay this install's, a person's grants are narrowed to what both hold, and
+`public_url` and `jellyfin_public_url` stay this install's, `public_ip_lookup` and `geoip_download` are on only where
+both have them on, `backup_keep` is never lowered and backups are never written less often, a person's grants are narrowed to what both hold, and
 somebody with no grants here gets the backup's narrowed to the defaults in force. A restored play counts as imported
 whatever source it names (`source_id` `restored:…` for one recorded live), so it is never continued by a restart and
 opens no picture before a library read has its title; plays, server log rows and devices dated before 1990 or after
