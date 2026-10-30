@@ -103,6 +103,8 @@ what they are in on your server, and how much of it has been watched.
 Renamed a file? Jellyfin treats it as a new item and orphans its history. FinStats notices and
 re-attaches the old plays to the new entry, when it can tell which one that is without guessing: a track
 only on the same album by the same artist, since half the albums there are have an "Intro".
+If a whole library drops out of Jellyfin's list for a while, its plays wait two days before they move to
+another library's copy of the same title (Movies beside Movies 4K), so a library that comes back keeps its own.
 
 ## Who watches together
 When two or more people press play on the same thing at the same time, or finish it together at the same place (SyncPlay
