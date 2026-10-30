@@ -124,7 +124,7 @@ Requests that change anything are refused when their `Origin` does not match; wh
 reached by (its public address, or a trusted proxy's `X-Forwarded-Proto`), the scheme must match too. A connection must
 send its request's head within 15 seconds, and after 15 seconds its body must keep up at least 1 KB a second; an
 answer the client does not read for 30 seconds is given up. At most 512 connections are served at once, and at most 64
-from one address (a trusted proxy's apart). A request without an
+from one public address (an address on this machine or a private network, a proxy's included, is not held to it). A request without an
 `Origin` carries either a cookie a browser attaches only to a navigation, or an API key no browser
 adds on its own.
 

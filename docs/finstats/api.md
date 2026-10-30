@@ -25,8 +25,8 @@ permissions; a request carrying both is judged on the header alone. An `Authoriz
   `Cache-Control: no-store` unless it sets a `Cache-Control` of its own (pictures, the calendar, public cards).
 - **Connections**: a request's head must arrive within 15 seconds; after 15 seconds its body must have averaged 1 KB a
   second, or the connection is closed. A write the client does not read for 30 seconds closes it too. At most 512
-  connections are served at once, and at most 64 from one address (an IPv6 /64), a trusted proxy's apart; past that a
-  new connection from it is closed at once.
+  connections are served at once, and at most 64 from one public address (an IPv6 /64); past that a new connection from
+  it is closed at once. An address on this machine or a private network (the household, a proxy) is not held to it.
 - **Uploads** (imports, a restore): at most 4 GB (`400` past it). An upload cut off half way leaves nothing behind and
   frees its slot at once.
 - **Common filters** (query string) on every `/api/stats/*`, `/api/activity`, `/api/users*`,
