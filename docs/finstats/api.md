@@ -1880,7 +1880,9 @@ keeps a choice this install already has for the same person.
 `GET /assets/finui.css` (no sign-in needed, as before) answers in the look of whoever's session cookie asks: FinUI's
 stylesheet, then the preset's tokens (FinUI's own generated file of each chosen option,
 `/assets/finui/p/{axis}/{option}.css`, in axis order, after a comment naming the code) with an ETag of its own and
-`Cache-Control: private, no-cache`, `Vary: Cookie`. Signed out, or nothing chosen: FinUI as it ships. The choices and their
+`Cache-Control: private, no-cache`, `Vary: Cookie`, and `Cross-Origin-Resource-Policy: same-origin` as the API has
+(2.3.1), so only FinStats' own pages may load it: a page on another port could otherwise read from it whether the
+visitor is signed in and which preset they chose. Signed out, or nothing chosen: FinUI as it ships. The choices and their
 names are `/assets/finui/create/presets.json`, FinUI's file.
 
 ## A title's page in Jellyfin, from anywhere
