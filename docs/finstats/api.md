@@ -1084,7 +1084,8 @@ that is not here yet, are listed as before. Switched-off connections say nothing
 
 - `GET /api/img/arr/{service_id}/{media_id}?w=`: the poster of a title that is not in the library yet, proxied from Sonarr or Radarr and cached on
   disk. Both ids are numbers; only posters of titles FinStats itself lists are served (what is on a calendar, what somebody asked for, and, for
-  people with `see_downloads`, what is downloading now), and the browser never talks to TMDB.
+  people with `see_downloads`, what is downloading now), never one of a title in the library that Jellyfin hides from the
+  caller, and the browser never talks to TMDB.
 - `GET /api/items/{id}` gains `item.upcoming` for a series or film with something due in the next 90 days: entries as above, without any of the
   keys about people.
 
