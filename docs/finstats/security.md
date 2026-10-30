@@ -19,7 +19,10 @@ Only a name that may use FinStats is put to Jellyfin. Once the users have been r
 removed or not allowed to sign in here is answered as a wrong password without Jellyfin being asked, no sooner than
 Jellyfin would have answered: such names cannot lock a Jellyfin account through FinStats, and Jellyfin's log never shows
 FinStats trying them. Somebody Jellyfin keeps to the home network (*Allow remote connections to this server* off) signs
-in to FinStats only from the home network too, because Jellyfin itself sees only FinStats' address. Attempts are rate
+in to FinStats only from the home network too, because Jellyfin itself sees only FinStats' address, and their session
+and keys work only from there as well. Home is a private network or the household's looked-up public address; an
+address typed in as home counts for plays, not for letting such a person in, and behind a proxy that
+`FINSTATS_TRUST_PROXY` does not name they cannot be judged at all and are kept out. Attempts are rate
 limited to 10 per 5 minutes per address (an IPv6 /64 counts as one address) and 50 per IPv6 /48, and after 60 failures
 in a minute on the whole server nothing more is put to Jellyfin until the minute is out. Only attempts put to Jellyfin
 count there, those still waiting on its answer included; a name FinStats turns down itself costs Jellyfin nothing and

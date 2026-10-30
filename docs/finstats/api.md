@@ -74,7 +74,10 @@ anything is tested or stored, and both count against the sign-in limit (`429`).
 may not use FinStats is answered `401` like a wrong password, without asking Jellyfin and no sooner than Jellyfin would
 have; `403` (no access) is then answered only before the first users read. A user Jellyfin made since the last users
 read is such a name until the next one. Somebody whose Jellyfin policy has remote access off is `403` from an address
-that is not the home network's. The limit is 10 attempts per address (an IPv6 /64 is one) and 50 per IPv6 /48 in five
+that is not the home network's, and their session or key is `401` from there on every request (the live channel closes).
+Home is a private network or the household's looked-up public address; an address entered by hand in the home
+addresses counts for plays, not for this. Behind a proxy that `FINSTATS_TRUST_PROXY` does not name, such a person is
+refused whenever the proxy sends `X-Forwarded-For`, since FinStats cannot tell where they are. The limit is 10 attempts per address (an IPv6 /64 is one) and 50 per IPv6 /48 in five
 minutes, and past 60 failures a minute on the whole server every attempt is `429` until the minute is out (only attempts put to
 Jellyfin count, those waiting on its answer included); a limiter that
 is full refuses a new address rather than forget an old one, and a sign-in that works does not clear the count. Behind
@@ -2058,8 +2061,13 @@ everybody's), `/api/users/{id}/shows`, Library health and Capacity (files, for `
 A request with an API key is refused `403` on anything that would outlast the key: `PUT /api/permissions/defaults`,
 `PUT /api/permissions/users/{id}`, `PUT /api/settings` naming `allow_user_login`, `default_permissions`, `public_url`,
 `public_profiles` or `jellyfin_public_url`, both backup restores, `POST /api/services`, `PUT /api/services/{id}`,
-`POST /api/services/test`, `POST /api/notifications/targets`, `PUT /api/notifications/targets/{id}`, and (as before)
-`POST /api/keys`, `DELETE /api/keys/{id}` and the owner's side of a public profile.
+`POST /api/services/test`, `POST /api/notifications/targets`, `PUT /api/notifications/targets/{id}`,
+`DELETE /api/notifications/targets/{id}`, and (as before) `POST /api/keys`, `DELETE /api/keys/{id}` and the owner's side
+of a public profile. So is anything that would switch off what notices a leaked key, or the backups that would undo what
+it did: `PUT /api/settings` changing `backup_keep`, `backup_every_d`, `merge_window_s`, `home_addresses`,
+`travel_speed_kmh`, `travel_min_km` or the schedule of `sync_users`, `sync_events` or `backup` (sent unchanged they pass),
+`PUT` and `DELETE /api/tasks/{id}/triggers` for those three jobs, `POST /api/security/alerts/resolve-all`,
+`POST /api/security/alerts/{id}/resolve` with `mute`, and `PUT /api/backups/{name}` with `deleted: true`.
 
 ## Work started by hand waits its minute
 
