@@ -1381,6 +1381,8 @@ title is not markup), Pushover and Pushbullet what they take; email is a plain-t
 - mail is encrypted or it does not go: `smtps://` from the first byte, `smtp://` must upgrade with STARTTLS. There is no
   third option, and no path by which the password is sent in the clear. A certificate of your own making is the same
   administrator-only switch (`accept_invalid_certs`) every other connection has.
+- a mail server is read no further than any reply could be (1 MiB over a whole letter, no read waiting longer than
+  10 s), and a Test stops after as long as a queued letter may take (2.3.1).
 
 
 ## `GET /api/jellyfin/jobs` 🔒: what your Jellyfin is doing right now
