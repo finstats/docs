@@ -869,7 +869,8 @@ most 50; anything else is a `400`). The response also carries, read-only:
 
 ```jsonc
 "known_home_addresses": [{"ip": "203.0.113.7", "source": "lookup"|"manual", "first_seen": 0, "last_seen": 0}],
-"public_ip_services": ["https://checkip.amazonaws.com", "…"]      // who is asked, in order
+"public_ip_services": ["checkip.amazonaws.com", "…"]              // who is asked, in order; the host alone (2.3.1): a path,
+                                                                 // query or login in FINSTATS_PUBLIC_IP_URL is never shown
 ```
 
 ---
@@ -911,7 +912,8 @@ both have them on, `backup_keep` is never lowered and backups are never written 
 somebody with no grants here gets the backup's narrowed to the defaults in force. A restored play counts as imported
 whatever source it names (`source_id` `restored:…` for one recorded live), so it is never continued by a restart and
 opens no picture before a library read has its title; plays, server log rows and devices dated before 1990 or after
-tomorrow are left out, and a play keeps at most 2,000 events. The finished
+tomorrow are left out, and a play keeps at most 2,000 events. Grants are held one per person, the narrowest the file
+gives them, for at most 10,000 people. The finished
 `restore` task carries `result: {"plays_imported","plays_skipped","events","other_rows","settings_restored","from_version"}`.
 
 **The file** is gzip-compressed JSON Lines. Line 1: `{"finstats_backup": 1, "app_version", "created_at", "server_name", "counts": {table: rows}}`.
@@ -2104,3 +2106,15 @@ and 12 words of `q`.
 - A page number far past the end of any paginated list is an empty page, not an error.
 - Imported plays need a start and an end between 1990 and tomorrow, in that order; season, episode and end numbers are
   kept only between 0 and 2,147,483,647, from every source.
+- A file size past 1 PiB, from any source, is no size, and totals add up without overflowing: one imported size of
+  `9e18` made the library overview, insights and library list answer errors for good.
+- `GET /api/server`: a disk whose free and used space are below zero or add up past any number is left out of
+  `storage`, rather than failing every read of the server.
+- `GET /api/recap?year=`: a year outside 1990 to 9998 is answered as no year asked for (the default year), not `500`.
+- A notification destination's `name` may hold no control characters (`400` at the field): it is written to the log.
+- The activity log (`sync_events`) is read on from its newest row that is not in the future, so one row dated years ahead
+  no longer stops it being read.
+- A paged read of Jellyfin stops when a page brings no new ids, so a server or proxy that ignores `StartIndex` cannot
+  keep a job reading one page until its time limit. A read kept whole (what somebody may see, played and favourite
+  flags) keeps what it had instead.
+- A published page's preview fills each `{{…}}` once: a display name holding `{{url}}` is shown as written.
