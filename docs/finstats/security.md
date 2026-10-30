@@ -6,7 +6,9 @@ never stored or logged. FinStats then issues its own session: a random 256-bit t
 as a hash, sent as an `HttpOnly; SameSite=Lax` cookie. When the page signing in is on https the cookie is also `Secure`
 and is named `__Host-finstats_session`: such a cookie belongs to that one hostname, and a site on a neighbouring name
 cannot set one in its place. A session begun on https is never accepted under the plain name, and signing out ends every
-session the browser sent. On plain http a browser sends the cookie to every port of the same host, so another web
+session the browser sent. Once the public address in Settings is https (or a proxy `FINSTATS_TRUST_PROXY` names says
+`X-Forwarded-Proto: https`), the plain name is not accepted at all and every new session is an https one, however the
+sign-in arrived; set the public address, since many proxies send no `X-Forwarded-Proto` unless told to. On plain http a browser sends the cookie to every port of the same host, so another web
 service on the machine FinStats runs on would receive it: give FinStats a hostname of its own on https.
 
 A session follows the person as Jellyfin has them now, not as they were when they signed in: once
