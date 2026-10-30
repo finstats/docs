@@ -119,7 +119,9 @@ Jellyfin administrator's credentials. Both steps count against the sign-in limit
 proxied from your own Jellyfin (only for titles FinStats has), and a strict Content-Security-Policy is sent with every
 response, with `Cross-Origin-Opener-Policy: same-origin` (a page that opened FinStats cannot reach into its tab later)
 and a `Permissions-Policy`. API answers carry `Cross-Origin-Resource-Policy: same-origin` and are not cached
-unless they say otherwise. After signing in, FinStats follows a link only to its own pages.
+unless they say otherwise. After signing in, FinStats follows a link only to its own pages. A part of a page's address
+(the id in `/items/…`) never reaches another API path than that page's own: one that decodes to a `/`, `.` or `..`, or
+to the start of a query or fragment, is refused.
 Requests that change anything are refused when their `Origin` does not match; where FinStats knows the scheme it is
 reached by (its public address, or a trusted proxy's `X-Forwarded-Proto`), the scheme must match too. A connection must
 send its request's head within 15 seconds, and after 15 seconds its body must keep up at least 1 KB a second; an
@@ -143,6 +145,10 @@ keep there. It then drops privileges with `su-exec` and cannot get them back; Fi
 refuses to when the data folder belongs to another user (`docker exec -u 1000 finstats finstats …` runs a command as
 that user). Start the container with `--user` and even that step is skipped. The data folder is closed to every other
 user of the machine (mode 0700) and everything FinStats writes in it is readable by its own user alone (0600).
+
+**The image** is built by GitHub Actions with every action pinned to a commit and both base images to a digest, so a
+tag moved in somebody else's repository cannot change what is built; Dependabot moves the pins, as a change you can
+read. A release (a `v` tag) builds from nothing, without the build cache other runs share.
 
 **Backups** (`data/backups`, and whatever you download from **Settings → Backups**) hold the full viewing history
 with IP addresses, the permissions, the settings and the audit log. They never contain the Jellyfin address or API
